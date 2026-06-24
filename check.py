@@ -5,43 +5,44 @@ import subprocess
 import sys
 from datetime import datetime
 from playwright.async_api import async_playwright
+from dotenv import load_dotenv
+
+# 환경변수 로드
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 URL = "https://support.amaranth10.com/user/am10manage/login"
 REPO_DIR = r"C:\Users\wndi1\OneDrive\바탕 화면\A10 이용가이드 사이트 접속 확인"
 RESULT_FILE = os.path.join(REPO_DIR, "results.json")
 
-LOGIN_ID = "minzz@douzone.com"
-LOGIN_PW = "wndi1328*"
+LOGIN_ID = os.getenv("LOGIN_ID")
+LOGIN_PW = os.getenv("LOGIN_PW")
+
+mode = "수동" if len(sys.argv) > 1 and sys.argv[1] == "manual" else "자동"
 
 async def check_site():
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M")
     result = {"timestamp": timestamp, "status": "", "message": "", "mode": mode}
 
+    browser = None
     try:
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
 
-            # 페이지 접속
             response = await page.goto(URL, timeout=15000)
 
             if not response or response.status != 200:
                 result["status"] = "fail"
                 result["message"] = f"페이지 접속 실패 HTTP {response.status if response else '응답없음'}"
-                await browser.close()
-                return result
+                return
 
-            # 로그인 시도
             await page.fill("input[type='email'], input[name='userId'], input[name='id'], input[type='text']", LOGIN_ID)
             await page.fill("input[type='password']", LOGIN_PW)
             await page.click("button.btn_login")
-
-            # 로그인 결과 대기
             await page.wait_for_timeout(3000)
 
             current_url = page.url
-
             if current_url != URL and "login" not in current_url:
                 result["status"] = "success"
                 result["message"] = "로그인 성공"
@@ -49,11 +50,13 @@ async def check_site():
                 result["status"] = "fail"
                 result["message"] = "로그인 실패 (아이디/비밀번호 오류 또는 페이지 변화 없음)"
 
-            await browser.close()
-
     except Exception as e:
         result["status"] = "error"
         result["message"] = str(e)
+
+    finally:
+        if browser:
+            await browser.close()
 
     # 기존 결과 불러오기
     if os.path.exists(RESULT_FILE):
@@ -79,5 +82,4 @@ async def check_site():
     except subprocess.CalledProcessError as e:
         print(f"GitHub 업로드 실패: {e}")
 
-mode = "수동" if len(sys.argv) > 1 and sys.argv[1] == "manual" else "자동"
 asyncio.run(check_site())
