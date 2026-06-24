@@ -2928,42 +2928,6 @@
     "mode": "자동"
   },
   {
-    "timestamp": "2026-06-24 13:00",
-    "status": "success",
-    "message": "접속 성공",
-    "mode": "자동"
-  },
-  {
-    "timestamp": "2026-06-24 14:00",
-    "status": "success",
-    "message": "접속 성공",
-    "mode": "자동"
-  },
-  {
-    "timestamp": "2026-06-24 15:00",
-    "status": "success",
-    "message": "로그인 성공",
-    "mode": "자동"
-  },
-  {
-    "timestamp": "2026-06-24 16:00",
-    "status": "success",
-    "message": "로그인 성공",
-    "mode": "자동"
-  },
-  {
-    "timestamp": "2026-06-24 17:00",
-    "status": "success",
-    "message": "접속 성공",
-    "mode": "수동"
-  },
-  {
-    "timestamp": "2026-06-24 18:00",
-    "status": "success",
-    "message": "접속 성공",
-    "mode": "자동"
-  },
-  {
     "timestamp": "2026-06-24 15:33",
     "status": "success",
     "message": "로그인 성공",
@@ -2998,5 +2962,11 @@
     "status": "success",
     "message": "로그인 성공",
     "mode": "수동"
+  },
+  {
+    "timestamp": "2026-06-24 17:00",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동"
   }
 ]
