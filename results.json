@@ -13,5 +13,10 @@
     "timestamp": "2026-06-24 15:02",
     "status": "success",
     "message": "접속 성공"
+  },
+  {
+    "timestamp": "2026-06-24 15:11",
+    "status": "success",
+    "message": "접속 성공"
   }
 ]
