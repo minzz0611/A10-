@@ -33,5 +33,11 @@
     "timestamp": "2026-06-24 15:15",
     "status": "error",
     "message": "Page.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type='submit'], input[type='submit']\")\n"
+  },
+  {
+    "timestamp": "2026-06-24 15:33",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "수동"
   }
 ]
