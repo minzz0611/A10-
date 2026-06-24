@@ -35,7 +35,7 @@ async def check_site():
             # 로그인 시도
             await page.fill("input[type='email'], input[name='userId'], input[name='id'], input[type='text']", LOGIN_ID)
             await page.fill("input[type='password']", LOGIN_PW)
-            await page.click("button[type='submit'], input[type='submit']")
+            await page.click("button.btn_login")
 
             # 로그인 결과 대기
             await page.wait_for_timeout(3000)
