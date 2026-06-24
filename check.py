@@ -44,11 +44,15 @@ async def check_site():
 
             current_url = page.url
             if current_url != URL and "login" not in current_url:
-                result["status"] = "success"
-                result["message"] = "로그인 성공"
-            else:
-                result["status"] = "fail"
-                result["message"] = "로그인 실패 (아이디/비밀번호 오류 또는 페이지 변화 없음)"
+                # 로그인 후 API 상태 확인
+                api_response = await page.request.get("https://support.amaranth10.com/api/user/home")
+                if api_response.status == 500:
+                    result["status"] = "fail"
+                    result["message"] = "로그인 성공 but 서버 오류 (재기동 필요) - HTTP 500"
+                else:
+                    result["status"] = "success"
+                    result["message"] = "로그인 성공"
+
 
     except Exception as e:
         result["status"] = "error"
@@ -75,7 +79,7 @@ async def check_site():
 
     # GitHub에 자동 push
     try:
-        subprocess.run(["git", "-C", REPO_DIR, "add", "results.json"], check=True)
+        subprocess.run(["git", "-C", REPO_DIR, "add", "results.json", "report.html"], check=True)
         subprocess.run(["git", "-C", REPO_DIR, "commit", "-m", f"update {timestamp}"], check=True)
         subprocess.run(["git", "-C", REPO_DIR, "push", "origin", "main"], check=True)
         print("GitHub 업로드 완료")
