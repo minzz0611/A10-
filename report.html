@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>A10 접속 확인 보고서</title>
+<style>
+  body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f9f9f9; color: #222; }
+  h1 { font-size: 20px; font-weight: 500; }
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 20px 0; }
+  .stat { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 16px; }
+  .stat-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .stat-num { font-size: 24px; font-weight: 500; }
+  .success { color: #1a7f4b; }
+  .fail { color: #c0392b; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+  th { background: #f4f4f4; padding: 10px 16px; text-align: left; font-size: 13px; color: #666; font-weight: 500; }
+  td { padding: 10px 16px; font-size: 13px; border-top: 1px solid #eee; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+  .badge-ok { background: #e6f4ee; color: #1a7f4b; }
+  .badge-fail { background: #fdecea; color: #c0392b; }
+  select { font-size: 13px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; }
+</style>
+</head>
+<body>
+<p style="font-size:13px;color:#888;margin-bottom:4px;">A10 이용가이드 사이트</p>
+<h1>접속 확인 보고서</h1>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">전체 기록</div><div class="stat-num" id="total">-</div></div>
+  <div class="stat"><div class="stat-label">접속 성공</div><div class="stat-num success" id="success">-</div></div>
+  <div class="stat"><div class="stat-label">접속 실패</div><div class="stat-num fail" id="fail">-</div></div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+  <strong style="font-size:14px;">최근 접속 기록</strong>
+  <select id="filter">
+    <option value="all">전체</option>
+    <option value="success">성공만</option>
+    <option value="fail">실패만</option>
+  </select>
+</div>
+
+<table>
+  <thead><tr><th>일시</th><th>상태</th><th>메시지</th></tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+const RESULT_FILE = "results.json";
+
+async function load() {
+  try {
+    const res = await fetch(RESULT_FILE + "?t=" + Date.now());
+    const data = await res.json();
+    const sorted = data.slice().reverse();
+    render(sorted);
+    document.getElementById("filter").onchange = () => render(sorted);
+  } catch(e) {
+    document.getElementById("tbody").innerHTML = '<tr><td colspan="3" style="color:#999;text-align:center;padding:20px;">results.json 파일을 불러올 수 없습니다.</td></tr>';
+  }
+}
+
+function render(data) {
+  const filter = document.getElementById("filter").value;
+  const filtered = filter === "all" ? data : data.filter(d => filter === "success" ? d.status === "success" : d.status !== "success");
+  document.getElementById("total").textContent = data.length;
+  document.getElementById("success").textContent = data.filter(d=>d.status==="success").length;
+  document.getElementById("fail").textContent = data.filter(d=>d.status!=="success").length;
+  document.getElementById("tbody").innerHTML = filtered.slice(0,100).map(d =>
+    `<tr>
+      <td style="color:#666">${d.timestamp}</td>
+      <td><span class="badge ${d.status==='success'?'badge-ok':'badge-fail'}">${d.status==='success'?'성공':'실패'}</span></td>
+      <td>${d.message}</td>
+    </tr>`
+  ).join("");
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
