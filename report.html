@@ -181,9 +181,14 @@ h1{font-size:18px;font-weight:600;margin-bottom:4px}
     <div class="table-head">
       <h2>상세 접속 기록</h2>
       <select id="statusFilter" onchange="renderTable()" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px">
-        <option value="all">전체</option>
-        <option value="success">성공만</option>
-        <option value="fail">실패만</option>
+	  <option value="all">전체</option>
+	  <option value="success">성공만</option>
+	  <option value="fail">실패만</option>
+      </select>
+      <select id="modeFilter" onchange="renderTable()" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px;margin-left:6px">
+	  <option value="all">자동+수동</option>
+	  <option value="자동">자동만</option>
+	  <option value="수동">수동만</option>
       </select>
     </div>
     <table class="tbl">
@@ -412,13 +417,20 @@ function renderChart(){
 
 function renderTable(){
   const filter=document.getElementById('statusFilter').value;
-  const data=filter==='all'?filtered:filtered.filter(d=>filter==='success'?d.status==='success':d.status!=='success');
+  const modeF=document.getElementById('modeFilter').value;
+  let data=filtered;
+  if(filter!=='all') data=data.filter(d=>filter==='success'?d.status==='success':d.status!=='success');
+  if(modeF!=='all') data=data.filter(d=>(d.mode||'자동')===modeF);
   document.getElementById('detailBody').innerHTML=data.slice(0,200).map(d=>{
     const ok=d.status==='success';
+    const isManual=(d.mode||'자동')==='수동';
     return `<tr class="${ok?'':'fail-row'}">
       <td style="color:#666">${d.timestamp}</td>
       <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
-      <td>${d.message}</td>
+      <td>
+        ${d.message}
+        <span style="margin-left:6px;font-size:11px;padding:1px 6px;border-radius:4px;background:${isManual?'#fff3e0':'#e8f5e9'};color:${isManual?'#e65100':'#2e7d32'}">${isManual?'수동':'자동'}</span>
+      </td>
     </tr>`;
   }).join('');
 }

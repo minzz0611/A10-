@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import subprocess
+import sys
 from datetime import datetime
 from playwright.async_api import async_playwright
 
@@ -15,7 +16,7 @@ LOGIN_PW = "wndi1328*"
 async def check_site():
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M")
-    result = {"timestamp": timestamp, "status": "", "message": ""}
+    result = {"timestamp": timestamp, "status": "", "message": "", "mode": mode}
 
     try:
         async with async_playwright() as p:
@@ -78,4 +79,5 @@ async def check_site():
     except subprocess.CalledProcessError as e:
         print(f"GitHub 업로드 실패: {e}")
 
+mode = "수동" if len(sys.argv) > 1 and sys.argv[1] == "manual" else "자동"
 asyncio.run(check_site())
