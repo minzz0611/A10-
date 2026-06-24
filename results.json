@@ -28,5 +28,10 @@
     "timestamp": "2026-06-24 15:13",
     "status": "success",
     "message": "접속 성공"
+  },
+  {
+    "timestamp": "2026-06-24 15:15",
+    "status": "error",
+    "message": "Page.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type='submit'], input[type='submit']\")\n"
   }
 ]
