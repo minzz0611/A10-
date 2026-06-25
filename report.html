@@ -2,261 +2,397 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A10 접속 확인 보고서</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Malgun Gothic',sans-serif;background:#f5f6fa;color:#222;font-size:13px}
-.wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
-
-/* 보고서 헤더 */
-.report-header{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:20px 24px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end}
-.report-title h1{font-size:20px;font-weight:700;margin-bottom:4px}
-.report-title p{font-size:12px;color:#888}
-.report-meta{text-align:right;font-size:12px;color:#888;line-height:1.8}
-.print-btn{background:#1976d2;color:#fff;border:none;border-radius:4px;padding:7px 18px;font-size:12px;cursor:pointer;margin-left:12px}
-.print-btn:hover{background:#1565c0}
-
-/* 조회 조건 */
-.search-box{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:14px 20px;margin-bottom:16px}
+body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:13px}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
+.header{background:#1a1a2e;color:#fff;border-radius:12px;padding:20px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.header-left h1{font-size:18px;font-weight:600;margin-bottom:4px}
+.header-left p{font-size:12px;color:#8b8fa8}
+.header-right{display:flex;gap:8px}
+.btn{border:none;border-radius:6px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit}
+.btn-white{background:#fff;color:#1a1a2e;font-weight:500}
+.btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)}
+.btn-outline:hover{background:rgba(255,255,255,0.1)}
+.tab-nav{display:flex;gap:2px;background:#fff;border-radius:10px;padding:6px;margin-bottom:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.tab-nav-btn{flex:1;border:none;background:transparent;border-radius:7px;padding:11px;font-size:14px;cursor:pointer;color:#888;font-family:inherit;font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab-nav-btn.on{background:#4f6ef7;color:#fff;box-shadow:0 2px 8px rgba(79,110,247,0.3)}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.search-box{background:#fff;border-radius:0 0 10px 10px;padding:12px 20px;margin-bottom:16px;box-shadow:0 2px 4px rgba(0,0,0,0.06);border-top:1px solid #f0f0f0}
 .search-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.search-label{font-size:12px;color:#555;min-width:40px}
-.date-input{border:1px solid #ddd;border-radius:4px;padding:5px 10px;font-size:13px;width:110px;cursor:pointer}
+.search-label{font-size:12px;color:#666;font-weight:500;min-width:36px}
+.date-input{border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;font-size:12px;width:108px;cursor:pointer;font-family:inherit;background:#fafafa}
 .quick-btns{display:flex;gap:4px;flex-wrap:wrap}
-.qbtn{border:1px solid #ddd;background:#fff;border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;color:#444}
-.qbtn:hover,.qbtn.on{background:#1976d2;color:#fff;border-color:#1976d2}
-.search-btn{background:#1976d2;color:#fff;border:none;border-radius:4px;padding:6px 20px;font-size:13px;cursor:pointer;margin-left:auto}
-
-/* 달력 */
-.cal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:1000;align-items:center;justify-content:center}
+.qbtn{border:1px solid #e0e0e0;background:#fff;border-radius:5px;padding:4px 10px;font-size:12px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
+.qbtn:hover,.qbtn.on{background:#4f6ef7;color:#fff;border-color:#4f6ef7}
+.search-btn{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:7px 20px;font-size:12px;cursor:pointer;font-family:inherit;margin-left:auto}
+.dv{width:1px;height:22px;background:#e0e0e0}
+.cal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center}
 .cal-overlay.show{display:flex}
-.cal-popup{background:#fff;border-radius:8px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:560px}
-.cal-quick{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #eee}
-.cal-months{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.cal-month-title{text-align:center;font-weight:600;font-size:14px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px}
-.cal-nav{cursor:pointer;color:#1976d2;font-size:18px;padding:0 4px}
+.cal-popup{background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.18);min-width:560px}
+.cal-quick{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
+.cal-months{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cal-month-title{text-align:center;font-weight:600;font-size:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px}
+.cal-nav{cursor:pointer;color:#4f6ef7;font-size:18px;padding:0 4px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-.cal-grid .dow{font-size:11px;color:#888;padding:4px 0}
+.cal-grid .dow{font-size:11px;color:#aaa;padding:4px 0;font-weight:500}
 .cal-grid .dow:first-child{color:#e53935}
-.cal-grid .dow:last-child{color:#1976d2}
-.cal-day{padding:5px 2px;border-radius:4px;cursor:pointer;font-size:12px}
-.cal-day:hover{background:#e3f2fd}
-.cal-day.other{color:#ccc;cursor:default}
+.cal-grid .dow:last-child{color:#4f6ef7}
+.cal-day{padding:5px 2px;border-radius:5px;cursor:pointer;font-size:12px}
+.cal-day:hover{background:#eef1ff}
+.cal-day.other{color:#ddd;cursor:default}
 .cal-day.sun{color:#e53935}
-.cal-day.sat{color:#1976d2}
-.cal-day.selected{background:#1976d2;color:#fff!important;border-radius:4px}
-.cal-day.in-range{background:#e3f2fd}
+.cal-day.sat{color:#4f6ef7}
+.cal-day.selected{background:#4f6ef7;color:#fff!important;font-weight:600}
+.cal-day.in-range{background:#eef1ff}
 .cal-day.today-mark{font-weight:700;text-decoration:underline}
-.cal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #eee}
-.sel-range{font-size:12px;color:#555}
+.cal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid #f0f0f0}
+.sel-range{font-size:12px;color:#666}
 .cal-btns{display:flex;gap:8px}
-.cal-cancel{border:1px solid #ddd;background:#fff;border-radius:4px;padding:5px 16px;cursor:pointer;font-size:12px}
-.cal-confirm{background:#1976d2;color:#fff;border:none;border-radius:4px;padding:5px 16px;cursor:pointer;font-size:12px}
-
-/* 요약 카드 */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.stat{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:16px;text-align:center}
-.stat-label{font-size:11px;color:#888;margin-bottom:8px}
-.stat-num{font-size:28px;font-weight:700}
-.stat-num.green{color:#1a7f4b}
-.stat-num.red{color:#c0392b}
-.stat-num.blue{color:#1976d2}
-.stat-num.orange{color:#e65100}
-
-/* 섹션 공통 */
-.section{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:16px 20px;margin-bottom:16px}
-.section-title{font-size:14px;font-weight:600;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
-
-/* 탭 */
-.tabs{display:flex;gap:4px;margin-bottom:12px}
-.tab{border:1px solid #ddd;background:#fff;border-radius:4px;padding:4px 14px;font-size:12px;cursor:pointer;color:#444}
-.tab.on{background:#1976d2;color:#fff;border-color:#1976d2}
-
-/* 성공률 테이블 */
-.rate-table{width:100%;border-collapse:collapse;font-size:12px}
-.rate-table th{background:#f5f6fa;padding:8px 12px;text-align:left;color:#666;font-weight:500;border-bottom:1px solid #e0e0e0}
-.rate-table td{padding:8px 12px;border-bottom:1px solid #f0f0f0}
-.rate-table tr.fail-row{background:#fff8f8}
-.rate-bar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
-.rate-bar-fill{height:100%;border-radius:3px}
-
-/* 실패 목록 */
-.fail-table{width:100%;border-collapse:collapse;font-size:12px}
-.fail-table th{background:#fff0f0;padding:8px 12px;text-align:left;color:#c0392b;font-weight:500;border-bottom:1px solid #ffd0d0}
-.fail-table td{padding:8px 12px;border-bottom:1px solid #fff0f0;background:#fff8f8}
-
-/* 전체 기록 */
+.cal-cancel{border:1px solid #e0e0e0;background:#fff;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-family:inherit}
+.cal-confirm{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-family:inherit}
+.status-banner{border-radius:10px;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:500}
+.status-banner.ok{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.status-banner.warn{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
+.status-banner.danger{background:#fee2e2;color:#dc2626;border:1px solid #fecaca}
+.last-check{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:12px;display:flex;align-items:center;gap:8px}
+.stats{display:grid;gap:14px;margin-bottom:14px}
+.stats.col4{grid-template-columns:repeat(4,1fr)}
+.stats.col3{grid-template-columns:repeat(3,1fr)}
+.stat{background:#fff;border-radius:10px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);border-top:3px solid #e0e0e0}
+.stat.blue{border-top-color:#4f6ef7}
+.stat.green{border-top-color:#22c55e}
+.stat.red{border-top-color:#ef4444}
+.stat.purple{border-top-color:#a855f7}
+.stat.amber{border-top-color:#f59e0b}
+.stat-label{font-size:11px;color:#888;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.stat-num{font-size:26px;font-weight:700;line-height:1}
+.stat-num.blue{color:#4f6ef7}
+.stat-num.green{color:#22c55e}
+.stat-num.red{color:#ef4444}
+.stat-num.purple{color:#a855f7}
+.stat-num.amber{color:#f59e0b}
+.stat-sub{font-size:11px;color:#aaa;margin-top:5px}
+.section{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px}
+.sec-title{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.sec-title-l{display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot.blue{background:#4f6ef7}.dot.green{background:#22c55e}.dot.red{background:#ef4444}.dot.amber{background:#f59e0b}.dot.purple{background:#a855f7}
+.section-divider{border:none;border-top:2px dashed #e0e0e0;margin:24px 0;position:relative}
+.section-divider-label{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#f0f2f5;padding:0 12px;font-size:11px;color:#aaa;font-weight:600;letter-spacing:.5px;white-space:nowrap}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.inner-tabs{display:flex;gap:2px;background:#f5f5f5;border-radius:6px;padding:2px}
+.itab{border:none;background:transparent;border-radius:5px;padding:4px 12px;font-size:12px;cursor:pointer;color:#666;font-family:inherit;transition:all .15s}
+.itab.on{background:#fff;color:#4f6ef7;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.tbl-wrap{overflow-x:auto;max-height:380px;overflow-y:auto}
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{background:#f5f6fa;padding:8px 12px;text-align:left;color:#666;font-weight:500;border-bottom:1px solid #e0e0e0}
-.tbl td{padding:8px 12px;border-bottom:1px solid #f0f0f0}
-.tbl tr.fail-row td{background:#fff8f8}
-.badge{font-size:11px;padding:2px 8px;border-radius:4px}
-.badge.ok{background:#e6f4ee;color:#1a7f4b}
-.badge.fail{background:#fdecea;color:#c0392b}
-.mode-badge{font-size:11px;padding:1px 6px;border-radius:4px;margin-left:4px}
-
-/* 접기/펼치기 */
-.toggle-btn{font-size:12px;color:#1976d2;cursor:pointer;background:none;border:none;padding:0}
+.tbl thead th{background:#f8f9fc;padding:9px 14px;text-align:left;color:#888;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:1}
+.tbl tbody td{padding:9px 14px;border-bottom:1px solid #f8f8f8;color:#444}
+.tbl tbody tr:hover td{background:#fafbff}
+.tbl tbody tr.fail-row td{background:#fff8f8}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.badge.ok{background:#dcfce7;color:#16a34a}
+.badge.fail{background:#fee2e2;color:#dc2626}
+.mode-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.mode-auto{background:#eff6ff;color:#3b82f6}
+.mode-manual{background:#fff7ed;color:#ea580c}
+.rate-table{width:100%;border-collapse:collapse;font-size:12px}
+.rate-table th{background:#f8f9fc;padding:8px 12px;text-align:left;color:#888;font-size:11px;font-weight:600;border-bottom:1px solid #f0f0f0}
+.rate-table td{padding:8px 12px;border-bottom:1px solid #f8f8f8}
+.rate-table tr.fail-row td{background:#fff8f8}
+.rbar{height:6px;background:#f0f0f0;border-radius:3px;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
+.rbar-fill{height:100%;border-radius:3px}
+.hm-cell{border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.fail-alert{background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:#dc2626;font-weight:500}
+.msg-type-bar{display:flex;flex-direction:column;gap:8px}
+.msg-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.msg-label{width:300px;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-bar-bg{flex:1;height:8px;background:#f5f5f5;border-radius:4px;overflow:hidden}
+.msg-bar-fill{height:100%;background:#ef4444;border-radius:4px}
+.msg-count{min-width:36px;text-align:right;color:#dc2626;font-weight:600}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.fbtn{border:1px solid #e0e0e0;background:#fff;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
+.fbtn:hover{border-color:#4f6ef7;color:#4f6ef7}
+.fbtn.on{background:#4f6ef7;color:#fff;border-color:#4f6ef7}
+.search-input{border:1px solid #e0e0e0;border-radius:6px;padding:5px 12px;font-size:12px;font-family:inherit;width:200px;margin-left:auto}
+.search-input:focus{outline:none;border-color:#4f6ef7}
+.toggle-btn{font-size:12px;color:#4f6ef7;cursor:pointer;background:none;border:none;font-family:inherit}
 .hidden{display:none}
-
-@media print{
-  .search-box,.print-btn,.no-print{display:none!important}
-  body{background:#fff}
-  .section,.stat,.report-header{box-shadow:none;border:1px solid #ddd}
-}
+.timeline{display:flex;flex-direction:column;gap:6px;padding:4px 0}
+.tl-row{display:flex;align-items:center;gap:12px}
+.tl-hour{font-size:12px;color:#888;width:36px;text-align:right;font-weight:500}
+.tl-bar-bg{flex:1;height:32px;background:#f5f5f5;border-radius:6px;overflow:hidden}
+.tl-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:600;color:#fff}
+.tl-bar-fill.ok{background:#22c55e}
+.tl-bar-fill.fail{background:#ef4444}
+.tl-bar-fill.empty{background:#f0f0f0;color:#bbb}
+.tl-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap;min-width:40px;text-align:center}
+.tl-badge.ok{background:#dcfce7;color:#16a34a}
+.tl-badge.fail{background:#fee2e2;color:#dc2626}
+.tl-badge.empty{background:#f5f5f5;color:#ccc}
+@media print{.tab-nav,.header-right,.no-print{display:none!important}.tab-content{display:block!important}body{background:#fff}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- 보고서 헤더 -->
-  <div class="report-header">
-    <div class="report-title">
-      <h1>A10 이용가이드 사이트 접속 확인 보고서</h1>
-      <p id="reportMeta">조회기간: -&nbsp;&nbsp;|&nbsp;&nbsp;작성일: -</p>
-    </div>
-    <div style="display:flex;align-items:center">
-      <button class="print-btn" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
-    </div>
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-left">
+    <h1>A10 이용가이드 접속 확인 보고서</h1>
+    <p id="reportMeta">-</p>
   </div>
-
-  <!-- 조회 조건 -->
-  <div class="search-box no-print">
-    <div class="search-row">
-      <span class="search-label">기간</span>
-      <input type="text" class="date-input" id="startDate" readonly placeholder="시작일" onclick="openCal()">
-      <span>~</span>
-      <input type="text" class="date-input" id="endDate" readonly placeholder="종료일" onclick="openCal()">
-      <div class="quick-btns">
-        <button class="qbtn" onclick="setQuick('today')">오늘</button>
-        <button class="qbtn" onclick="setQuick('yesterday')">전일</button>
-        <button class="qbtn" onclick="setQuick('week')">주간</button>
-        <button class="qbtn" onclick="setQuick('lastweek')">전주</button>
-        <button class="qbtn" onclick="setQuick('month')">당월</button>
-        <button class="qbtn" onclick="setQuick('lastmonth')">이전달</button>
-      </div>
-      <button class="search-btn" onclick="applyFilter()">조회</button>
-    </div>
+  <div class="header-right">
+    <button class="btn btn-outline" onclick="load()">↻ 새로고침</button>
+    <button class="btn btn-white" onclick="window.print()">🖨 인쇄 / PDF</button>
   </div>
+</div>
 
-  <!-- 달력 팝업 -->
-  <div class="cal-overlay" id="calOverlay">
-    <div class="cal-popup">
-      <div class="cal-quick">
-        <button class="qbtn" onclick="setQuickCal('today')">오늘</button>
-        <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
-        <button class="qbtn" onclick="setQuickCal('week')">주간</button>
-        <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
-        <button class="qbtn" onclick="setQuickCal('month')">당월</button>
-        <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
-      </div>
-      <div class="cal-months">
-        <div>
-          <div class="cal-month-title">
-            <span class="cal-nav" onclick="moveCal(-1)">&#8249;</span>
-            <span id="calTitle1"></span>
-            <span class="cal-nav" onclick="moveCal(1)">&#8250;</span>
-          </div>
-          <div class="cal-grid" id="calGrid1"></div>
+<!-- 탭 네비게이션 -->
+<div class="tab-nav no-print">
+  <button class="tab-nav-btn on" onclick="switchTab('today',this)">📅 금일 현황</button>
+  <button class="tab-nav-btn" onclick="switchTab('all',this)">📊 전체 현황</button>
+</div>
+
+<!-- 전체현황 탭 조회조건 (탭 바로 아래) -->
+<div class="search-box no-print" id="searchBox" style="display:none">
+  <div class="search-row">
+    <span class="search-label">기간</span>
+    <input type="text" class="date-input" id="startDate" readonly placeholder="시작일" onclick="openCal()">
+    <span style="color:#ccc">~</span>
+    <input type="text" class="date-input" id="endDate" readonly placeholder="종료일" onclick="openCal()">
+    <div class="dv"></div>
+    <div class="quick-btns">
+      <button class="qbtn" onclick="setQuick('today')">오늘</button>
+      <button class="qbtn" onclick="setQuick('yesterday')">전일</button>
+      <button class="qbtn" onclick="setQuick('week')">주간</button>
+      <button class="qbtn" onclick="setQuick('lastweek')">전주</button>
+      <button class="qbtn" onclick="setQuick('month')">당월</button>
+      <button class="qbtn" onclick="setQuick('lastmonth')">이전달</button>
+    </div>
+    <button class="search-btn" onclick="applyFilter()">조회</button>
+  </div>
+</div>
+
+<!-- 달력 팝업 -->
+<div class="cal-overlay" id="calOverlay">
+  <div class="cal-popup">
+    <div class="cal-quick">
+      <button class="qbtn" onclick="setQuickCal('today')">오늘</button>
+      <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
+      <button class="qbtn" onclick="setQuickCal('week')">주간</button>
+      <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
+      <button class="qbtn" onclick="setQuickCal('month')">당월</button>
+      <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
+    </div>
+    <div class="cal-months">
+      <div>
+        <div class="cal-month-title">
+          <span class="cal-nav" onclick="moveCal(-1)">&#8249;</span>
+          <span id="calTitle1"></span>
+          <span class="cal-nav" onclick="moveCal(1)">&#8250;</span>
         </div>
-        <div>
-          <div class="cal-month-title">
-            <span id="calTitle2"></span>
-          </div>
-          <div class="cal-grid" id="calGrid2"></div>
-        </div>
+        <div class="cal-grid" id="calGrid1"></div>
       </div>
-      <div class="cal-footer">
-        <span class="sel-range" id="selRange">선택기간: -</span>
-        <div class="cal-btns">
-          <button class="cal-cancel" onclick="closeCal()">취소</button>
-          <button class="cal-confirm" onclick="confirmCal()">확인</button>
-        </div>
+      <div>
+        <div class="cal-month-title"><span id="calTitle2"></span></div>
+        <div class="cal-grid" id="calGrid2"></div>
+      </div>
+    </div>
+    <div class="cal-footer">
+      <span class="sel-range" id="selRange">선택기간: -</span>
+      <div class="cal-btns">
+        <button class="cal-cancel" onclick="closeCal()">취소</button>
+        <button class="cal-confirm" onclick="confirmCal()">확인</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 요약 카드 -->
-  <div class="stats">
-    <div class="stat"><div class="stat-label">전체 접속 시도</div><div class="stat-num blue" id="statTotal">-</div></div>
-    <div class="stat"><div class="stat-label">접속 성공</div><div class="stat-num green" id="statSuccess">-</div></div>
-    <div class="stat"><div class="stat-label">접속 실패</div><div class="stat-num red" id="statFail">-</div></div>
-    <div class="stat"><div class="stat-label">전체 성공률</div><div class="stat-num" id="statRate">-</div></div>
+<!-- ===== 탭1: 금일 현황 ===== -->
+<div class="tab-content on" id="tab-today" style="margin-top:16px">
+
+  <div id="todayBanner" class="status-banner ok">
+    <span id="todayIcon">✅</span>
+    <span id="todayText">데이터 로딩 중...</span>
   </div>
 
-  <!-- 일별 성공률 추이 차트 -->
-  <div class="section">
-    <div class="section-title">일별 접속 성공률 추이</div>
-    <canvas id="myChart" height="70"></canvas>
+  <div class="last-check">
+    🕐 마지막 접속 확인: <strong id="lastCheckTime">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong>
   </div>
 
-  <!-- 성공률 현황 -->
-  <div class="section">
-    <div class="section-title">
-      <span>기간별 성공률 현황</span>
-      <div class="tabs" style="margin:0">
-        <button class="tab on" onclick="switchTab('day',this)">일별</button>
-        <button class="tab" onclick="switchTab('week',this)">주별</button>
-        <button class="tab" onclick="switchTab('month',this)">월별</button>
-      </div>
-    </div>
-    <table class="rate-table">
-      <thead><tr><th>기간</th><th>전체</th><th>성공</th><th>실패</th><th>성공률</th></tr></thead>
-      <tbody id="rateBody"></tbody>
-    </table>
+  <div class="stats col3">
+    <div class="stat blue"><div class="stat-label">오늘 접속 시도</div><div class="stat-num blue" id="t-total">-</div><div class="stat-sub" id="t-date">-</div></div>
+    <div class="stat green"><div class="stat-label">오늘 성공</div><div class="stat-num green" id="t-success">-</div><div class="stat-sub" id="t-successRate">-</div></div>
+    <div class="stat red"><div class="stat-label">오늘 실패</div><div class="stat-num red" id="t-fail">-</div><div class="stat-sub" id="t-failRate">-</div></div>
   </div>
 
-  <!-- 실패 구간 -->
   <div class="section">
-    <div class="section-title" style="color:#c0392b">접속 실패 기록</div>
-    <table class="fail-table">
-      <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
-      <tbody id="failBody"></tbody>
-    </table>
+    <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
+    <div class="timeline" id="todayTimeline"></div>
   </div>
 
-  <!-- 전체 기록 -->
   <div class="section">
-    <div class="section-title">
-      <span>전체 접속 기록</span>
-      <div style="display:flex;gap:8px;align-items:center">
-        <select id="statusFilter" onchange="renderTable()" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px">
-          <option value="all">전체</option>
-          <option value="success">성공만</option>
-          <option value="fail">실패만</option>
-        </select>
-        <select id="modeFilter" onchange="renderTable()" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px">
-          <option value="all">자동+수동</option>
-          <option value="자동">자동만</option>
-          <option value="수동">수동만</option>
-        </select>
-        <button class="toggle-btn" onclick="toggleDetail()">접기 ▲</button>
-      </div>
-    </div>
-    <div id="detailWrap">
+    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 히트맵</span></div>
+    <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>오늘 실패 목록</span></div>
+    <div id="todayFailAlert"></div>
+    <div class="tbl-wrap">
       <table class="tbl">
-        <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
-        <tbody id="detailBody"></tbody>
+        <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
+        <tbody id="todayFailBody"></tbody>
       </table>
     </div>
   </div>
 
 </div>
 
+<!-- ===== 탭2: 전체 현황 + 실패 요인 분석 ===== -->
+<div class="tab-content" id="tab-all" style="margin-top:16px">
+
+  <!-- 전체 현황 -->
+  <div class="stats col4">
+    <div class="stat blue"><div class="stat-label">전체 접속 시도</div><div class="stat-num blue" id="a-total">-</div><div class="stat-sub" id="a-period">-</div></div>
+    <div class="stat green"><div class="stat-label">접속 성공</div><div class="stat-num green" id="a-success">-</div><div class="stat-sub" id="a-successRate">-</div></div>
+    <div class="stat red"><div class="stat-label">접속 실패</div><div class="stat-num red" id="a-fail">-</div><div class="stat-sub" id="a-failRate">-</div></div>
+    <div class="stat purple"><div class="stat-label">전체 성공률</div><div class="stat-num purple" id="a-rate">-</div><div class="stat-sub" id="a-rateSub">-</div></div>
+  </div>
+
+  <div style="display:none">
+    <canvas id="lineChart"></canvas>
+    <canvas id="donutChart"></canvas>
+  </div>
+
+
+  <div class="section">
+    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 히트맵</span></div>
+    <div id="allHeatmapWrap" style="overflow-x:auto"></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">
+      <span class="sec-title-l"><span class="dot blue"></span>기간별 성공률 현황</span>
+      <div class="inner-tabs">
+        <button class="itab on" onclick="switchRateTab('day',this)">일별</button>
+        <button class="itab" onclick="switchRateTab('week',this)">주별</button>
+        <button class="itab" onclick="switchRateTab('month',this)">월별</button>
+      </div>
+    </div>
+    <div style="max-height:300px;overflow-y:auto">
+      <table class="rate-table">
+        <thead><tr><th>기간</th><th>전체</th><th>성공</th><th>실패</th><th>성공률</th></tr></thead>
+        <tbody id="rateBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">
+      <span class="sec-title-l"><span class="dot blue"></span>전체 접속 기록</span>
+      <button class="toggle-btn" onclick="toggleDetail()">접기 ▲</button>
+    </div>
+    <div class="filter-bar no-print">
+      <span style="font-size:12px;color:#888;font-weight:500">상태</span>
+      <button class="fbtn on" data-group="status" data-val="all" onclick="toggleFilter(this)">전체</button>
+      <button class="fbtn" data-group="status" data-val="success" onclick="toggleFilter(this)">성공</button>
+      <button class="fbtn" data-group="status" data-val="fail" onclick="toggleFilter(this)">실패</button>
+      <div class="dv"></div>
+      <span style="font-size:12px;color:#888;font-weight:500">구분</span>
+      <button class="fbtn on" data-group="mode" data-val="all" onclick="toggleFilter(this)">전체</button>
+      <button class="fbtn" data-group="mode" data-val="자동" onclick="toggleFilter(this)">자동</button>
+      <button class="fbtn" data-group="mode" data-val="수동" onclick="toggleFilter(this)">수동</button>
+      <input type="text" class="search-input" id="msgSearch" placeholder="메시지 검색..." oninput="renderTable()">
+    </div>
+    <div id="detailWrap">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 구분선 -->
+  <hr class="section-divider"><span class="section-divider-label">실패 요인 분석</span>
+
+  <!-- 실패 요인 분석 -->
+  <div class="stats col4" style="margin-top:8px">
+    <div class="stat red"><div class="stat-label">총 실패 건수</div><div class="stat-num red" id="f-total">-</div><div class="stat-sub" id="f-totalSub">-</div></div>
+    <div class="stat amber"><div class="stat-label">실패율</div><div class="stat-num amber" id="f-rate">-</div><div class="stat-sub" id="f-rateSub">-</div></div>
+    <div class="stat" style="border-top-color:#8b5cf6"><div class="stat-label">실패 유형 수</div><div class="stat-num" style="color:#8b5cf6" id="f-types">-</div><div class="stat-sub">고유 오류 메시지</div></div>
+    <div class="stat" style="border-top-color:#06b6d4"><div class="stat-label">최근 실패</div><div class="stat-num" style="color:#06b6d4;font-size:13px;line-height:1.4" id="f-last">-</div><div class="stat-sub" id="f-lastMsg">-</div></div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="section" style="margin-bottom:0">
+      <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>실패 메시지 유형별 분류</span></div>
+      <div class="msg-type-bar" id="msgTypeBar"></div>
+    </div>
+    <div class="section" style="margin-bottom:0">
+      <div class="sec-title">
+        <span class="sec-title-l"><span class="dot amber"></span>기간별 실패율</span>
+        <div class="inner-tabs">
+          <button class="itab on" onclick="switchFailTab('day',this)">일별</button>
+          <button class="itab" onclick="switchFailTab('week',this)">주별</button>
+          <button class="itab" onclick="switchFailTab('month',this)">월별</button>
+        </div>
+      </div>
+      <div style="max-height:280px;overflow-y:auto">
+        <table class="rate-table">
+          <thead><tr><th>기간</th><th>전체</th><th>실패</th><th>실패율</th></tr></thead>
+          <tbody id="failRateBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>실패 목록</span></div>
+    <div id="failAlert"></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
+        <tbody id="failBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
 <script>
 let allData=[], filtered=[], calStart=null, calEnd=null;
 let calBaseYear, calBaseMonth;
-let chartInst=null, currentTab='day', detailOpen=true;
+let lineInst=null, donutInst=null;
+let currentRateTab='day', currentFailTab='day', detailOpen=true;
+let filterStatus='all', filterMode='all';
 
 function fmt(d){return d.toISOString().slice(0,10);}
 function today(){return new Date();}
+function todayStr(){return fmt(today());}
 function diffDays(a,b){return Math.round((b-a)/(1000*60*60*24))+1;}
+
+function switchTab(id, el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  el.classList.add('on');
+  document.getElementById('searchBox').style.display = id==='all' ? 'block' : 'none';
+}
 
 function setQuick(type){
   const t=today(); let s,e;
   if(type==='today'){s=e=fmt(t);}
   else if(type==='yesterday'){const y=new Date(t);y.setDate(y.getDate()-1);s=e=fmt(y);}
-  else if(type==='week'){const mon=new Date(t);mon.setDate(t.getDate()-t.getDay()+1);s=fmt(mon);e=fmt(t);}
+  else if(type==='week'){const m=new Date(t);m.setDate(t.getDate()-t.getDay()+1);s=fmt(m);e=fmt(t);}
   else if(type==='lastweek'){const lm=new Date(t);lm.setDate(t.getDate()-t.getDay());const ls=new Date(lm);ls.setDate(lm.getDate()-6);s=fmt(ls);e=fmt(lm);}
   else if(type==='month'){s=fmt(new Date(t.getFullYear(),t.getMonth(),1));e=fmt(t);}
   else if(type==='lastmonth'){const a=new Date(t.getFullYear(),t.getMonth()-1,1);const b=new Date(t.getFullYear(),t.getMonth(),0);s=fmt(a);e=fmt(b);}
@@ -306,7 +442,7 @@ function renderMonth(gridId,titleId,year,month){
   const first=new Date(year,month,1).getDay();
   const last=new Date(year,month+1,0).getDate();
   const prevLast=new Date(year,month,0).getDate();
-  const todayStr=fmt(today());
+  const ts=todayStr();
   for(let i=0;i<first;i++){
     const el=document.createElement('div');
     el.className='cal-day other';
@@ -320,7 +456,7 @@ function renderMonth(gridId,titleId,year,month){
     const dow=date.getDay();
     if(dow===0) cls+=' sun';
     if(dow===6) cls+=' sat';
-    if(ds===todayStr) cls+=' today-mark';
+    if(ds===ts) cls+=' today-mark';
     if(calStart&&calEnd){
       if(ds===fmt(calStart)||ds===fmt(calEnd)) cls+=' selected';
       else if(date>calStart&&date<calEnd) cls+=' in-range';
@@ -336,7 +472,6 @@ function selectDay(date){
   else{if(date<calStart){calEnd=calStart;calStart=date;}else{calEnd=date;}}
   renderCal();
 }
-
 function updateSelRange(){
   const el=document.getElementById('selRange');
   if(calStart&&calEnd) el.textContent='선택기간: '+diffDays(calStart,calEnd)+'일';
@@ -349,9 +484,17 @@ async function load(){
     const res=await fetch('results.json?t='+Date.now());
     allData=await res.json();
     allData.sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
-    setQuick('month');
+    const t=today();
+    const s=fmt(new Date(t.getFullYear(),t.getMonth(),1));
+    const e=fmt(t);
+    document.getElementById('startDate').value=s;
+    document.getElementById('endDate').value=e;
+    calStart=new Date(s); calEnd=new Date(e);
+    filtered=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=s&&dt<=e;});
+    document.getElementById('reportMeta').textContent=`작성일: ${new Date().toLocaleDateString('ko-KR')}`;
+    renderAll();
   } catch(e){
-    document.getElementById('detailBody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">데이터를 불러올 수 없습니다.</td></tr>';
+    document.getElementById('detailBody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:24px;color:#aaa">데이터를 불러올 수 없습니다.</td></tr>';
   }
 }
 
@@ -359,133 +502,222 @@ function applyFilter(){
   const s=document.getElementById('startDate').value;
   const e=document.getElementById('endDate').value;
   filtered=(!s||!e)?[...allData]:allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=s&&dt<=e;});
-  const now=new Date().toLocaleDateString('ko-KR');
-  document.getElementById('reportMeta').textContent=`조회기간: ${s} ~ ${e}\u00a0\u00a0|\u00a0\u00a0작성일: ${now}`;
+  document.getElementById('reportMeta').textContent=`조회기간: ${s} ~ ${e}  |  작성일: ${new Date().toLocaleDateString('ko-KR')}`;
   renderAll();
 }
 
 function renderAll(){
-  renderStats(); renderRateTable(currentTab); renderChart(); renderFailTable(); renderTable();
+  renderTodayTab();
+  renderAllTab();
+  renderFailSection();
 }
 
-function renderStats(){
+function renderTodayTab(){
+  const ts=todayStr();
+  const todayData=allData.filter(d=>d.timestamp.slice(0,10)===ts);
+  const succ=todayData.filter(d=>d.status==='success').length;
+  const fail=todayData.length-succ;
+  const rate=todayData.length>0?Math.round(succ/todayData.length*100):null;
+
+  const banner=document.getElementById('todayBanner');
+  const icon=document.getElementById('todayIcon');
+  const text=document.getElementById('todayText');
+  if(todayData.length===0){
+    banner.className='status-banner warn';icon.textContent='⏳';text.textContent='오늘 접속 기록이 아직 없습니다.';
+  } else if(rate>=90){
+    banner.className='status-banner ok';icon.textContent='✅';text.textContent=`오늘 정상 운영 중입니다. (성공률 ${rate}%, 실패 ${fail}건)`;
+  } else if(rate>=70){
+    banner.className='status-banner warn';icon.textContent='⚠️';text.textContent=`오늘 주의가 필요합니다. (성공률 ${rate}%, 실패 ${fail}건)`;
+  } else {
+    banner.className='status-banner danger';icon.textContent='🚨';text.textContent=`오늘 점검이 필요합니다! (성공률 ${rate}%, 실패 ${fail}건)`;
+  }
+
+  const last=allData[0];
+  if(last){
+    document.getElementById('lastCheckTime').textContent=last.timestamp;
+    const ok=last.status==='success';
+    document.getElementById('lastCheckResult').innerHTML=`<span style="color:${ok?'#22c55e':'#ef4444'}">${ok?'✅ 접속 성공':'❌ 접속 실패'}</span>`;
+  }
+
+  document.getElementById('t-total').textContent=todayData.length;
+  document.getElementById('t-success').textContent=succ;
+  document.getElementById('t-fail').textContent=fail;
+  document.getElementById('t-date').textContent=ts;
+  document.getElementById('t-successRate').textContent=todayData.length>0?`성공률 ${rate}%`:'';
+  document.getElementById('t-failRate').textContent=todayData.length>0?`실패율 ${100-rate}%`:'';
+
+  const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
+  document.getElementById('todayTimeline').innerHTML=hours.map(h=>{
+    const rec=todayData.find(d=>d.timestamp.slice(11,13)===h);
+    if(!rec) return `<div class="tl-row"><div class="tl-hour">${h}시</div><div class="tl-bar-bg"><div class="tl-bar-fill empty" style="width:100%">미실행</div></div><span class="tl-badge empty">-</span></div>`;
+    const ok=rec.status==='success';
+    return `<div class="tl-row"><div class="tl-hour">${h}시</div><div class="tl-bar-bg"><div class="tl-bar-fill ${ok?'ok':'fail'}" style="width:100%">${rec.message}</div></div><span class="tl-badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></div>`;
+  }).join('');
+
+  const t=today();
+  const mon=new Date(t); mon.setDate(t.getDate()-t.getDay()+1);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+4);
+  const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(sun);});
+  renderHeatmap('weekHeatmapWrap', weekData);
+
+  const fails=todayData.filter(d=>d.status!=='success');
+  document.getElementById('todayFailAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 오늘 접속 실패 ${fails.length}건이 발견됐습니다.</div>`:'';
+  const tbody=document.getElementById('todayFailBody');
+  tbody.innerHTML=fails.length===0
+    ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">오늘 실패 기록이 없습니다. ✅</td></tr>'
+    :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
+}
+
+function renderAllTab(){
   const total=filtered.length;
   const succ=filtered.filter(d=>d.status==='success').length;
   const fail=total-succ;
   const rate=total>0?Math.round(succ/total*100):0;
-  document.getElementById('statTotal').textContent=total;
-  document.getElementById('statSuccess').textContent=succ;
-  document.getElementById('statFail').textContent=fail;
-  const rateEl=document.getElementById('statRate');
-  rateEl.textContent=rate+'%';
-  rateEl.className='stat-num '+(rate>=90?'green':rate>=70?'blue':'red');
+  const s=document.getElementById('startDate').value;
+  const e=document.getElementById('endDate').value;
+  document.getElementById('a-total').textContent=total;
+  document.getElementById('a-success').textContent=succ;
+  document.getElementById('a-fail').textContent=fail;
+  document.getElementById('a-rate').textContent=rate+'%';
+  document.getElementById('a-period').textContent=s&&e?`${s} ~ ${e}`:'';
+  document.getElementById('a-successRate').textContent=total>0?`전체의 ${rate}%`:'';
+  document.getElementById('a-failRate').textContent=total>0?`전체의 ${100-rate}%`:'';
+  document.getElementById('a-rateSub').textContent=rate>=90?'✅ 정상':rate>=70?'⚠️ 주의':'🚨 점검 필요';
+  document.getElementById('a-rate').className='stat-num '+(rate>=90?'purple':rate>=70?'amber':'red');
+  renderLineChart();
+  renderDonutChart();
+  renderHeatmap('allHeatmapWrap', filtered);
+  renderRateTable(currentRateTab);
+  renderTable();
 }
 
-function switchTab(type,el){
-  currentTab=type;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+function renderLineChart(){
+  const g={};
+  filtered.forEach(d=>{const k=d.timestamp.slice(0,10);if(!g[k]) g[k]={s:0,t:0};g[k].t++;if(d.status==='success') g[k].s++;});
+  const keys=Object.keys(g).sort();
+  const rates=keys.map(k=>g[k].t>0?Math.round(g[k].s/g[k].t*100):0);
+  const colors=rates.map(r=>r>=90?'#22c55e':r>=70?'#f59e0b':'#ef4444');
+  if(lineInst) lineInst.destroy();
+  lineInst=new Chart(document.getElementById('lineChart'),{
+    type:'line',
+    data:{labels:keys,datasets:[{label:'성공률(%)',data:rates,borderColor:'#4f6ef7',backgroundColor:'rgba(79,110,247,0.06)',pointBackgroundColor:colors,pointRadius:4,pointHoverRadius:6,tension:0.3,fill:true,borderWidth:2}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'성공률: '+ctx.raw+'%'}}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'#f5f5f5'}},x:{ticks:{maxTicksLimit:15,font:{size:10}},grid:{display:false}}}}
+  });
+}
+
+function renderDonutChart(){
+  const succ=filtered.filter(d=>d.status==='success').length;
+  const fail=filtered.length-succ;
+  if(donutInst) donutInst.destroy();
+  donutInst=new Chart(document.getElementById('donutChart'),{
+    type:'doughnut',
+    data:{labels:['성공','실패'],datasets:[{data:[succ,fail],backgroundColor:['#22c55e','#ef4444'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:14}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}건 (${filtered.length>0?Math.round(ctx.raw/filtered.length*100):0}%)`}}}}
+  });
+}
+
+function renderHeatmap(targetId, data){
+  const days=['월','화','수','목','금'];
+  const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
+  const grid={};
+  days.forEach(d=>hours.forEach(h=>{grid[d+h]={s:0,t:0};}));
+  data.forEach(d=>{
+    const dt=new Date(d.timestamp);
+    const dow=['일','월','화','수','목','금','토'][dt.getDay()];
+    const h=d.timestamp.slice(11,13);
+    if(grid[dow+h]){grid[dow+h].t++;if(d.status==='success') grid[dow+h].s++;}
+  });
+  const cw=56;
+  let html=`<div style="display:grid;grid-template-columns:28px ${hours.map(()=>cw+'px').join(' ')};gap:3px;min-width:${28+hours.length*(cw+3)}px">`;
+  html+='<div></div>';
+  hours.forEach(h=>{html+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
+  days.forEach(day=>{
+    html+=`<div style="display:flex;align-items:center;justify-content:center;font-size:11px;color:#666;font-weight:600">${day}</div>`;
+    hours.forEach(h=>{
+      const c=grid[day+h];
+      const r=c.t>0?Math.round(c.s/c.t*100):null;
+      let bg='#f5f5f5',tc='#ccc',lb='-';
+      if(r!==null){
+        if(r===100){bg='#dcfce7';tc='#16a34a';}
+        else if(r>=90){bg='#bbf7d0';tc='#15803d';}
+        else if(r>=70){bg='#fef9c3';tc='#854d0e';}
+        else{bg='#fee2e2';tc='#dc2626';}
+        lb=r+'%';
+      }
+      html+=`<div class="hm-cell" style="background:${bg};color:${tc}" title="${day}요일 ${h}시: ${c.t}건 중 ${c.s}건 성공">${lb}</div>`;
+    });
+  });
+  html+='</div>';
+  html+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:#888;align-items:center">
+    <span style="font-weight:500">범례</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#dcfce7;border-radius:2px;vertical-align:middle;margin-right:3px"></span>100%</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#bbf7d0;border-radius:2px;vertical-align:middle;margin-right:3px"></span>90%+</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#fef9c3;border-radius:2px;vertical-align:middle;margin-right:3px"></span>70%+</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#fee2e2;border-radius:2px;vertical-align:middle;margin-right:3px"></span>70% 미만</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#f5f5f5;border-radius:2px;vertical-align:middle;margin-right:3px"></span>데이터 없음</span>
+  </div>`;
+  document.getElementById(targetId).innerHTML=html;
+}
+
+function getWeekKey(dt){
+  const m=new Date(dt); m.setDate(dt.getDate()-dt.getDay()+1);
+  const f=new Date(m); f.setDate(m.getDate()+4);
+  return fmt(m)+'~'+fmt(f);
+}
+
+function switchRateTab(type,el){
+  currentRateTab=type;
+  document.querySelectorAll('#tab-all .inner-tabs:first-of-type .itab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
   renderRateTable(type);
 }
 
-function getWeekKey(dt){
-  const mon=new Date(dt); mon.setDate(dt.getDate()-dt.getDay()+1);
-  const fri=new Date(mon); fri.setDate(mon.getDate()+4);
-  return fmt(mon)+'~'+fmt(fri);
-}
-
 function renderRateTable(type){
-  const groups={};
+  const g={};
   filtered.forEach(d=>{
     const dt=new Date(d.timestamp);
-    let key;
-    if(type==='day') key=d.timestamp.slice(0,10);
-    else if(type==='week') key=getWeekKey(dt);
-    else key=d.timestamp.slice(0,7);
-    if(!groups[key]) groups[key]={total:0,succ:0};
-    groups[key].total++;
-    if(d.status==='success') groups[key].succ++;
+    const k=type==='day'?d.timestamp.slice(0,10):type==='week'?getWeekKey(dt):d.timestamp.slice(0,7);
+    if(!g[k]) g[k]={t:0,s:0};
+    g[k].t++;
+    if(d.status==='success') g[k].s++;
   });
-  const keys=Object.keys(groups).sort().reverse();
+  const keys=Object.keys(g).sort().reverse();
   document.getElementById('rateBody').innerHTML=keys.map(k=>{
-    const g=groups[k];
-    const rate=Math.round(g.succ/g.total*100);
-    const fail=g.total-g.succ;
-    const color=rate>=90?'#1a7f4b':rate>=70?'#1976d2':'#c0392b';
-    return `<tr class="${fail>0?'fail-row':''}">
-      <td>${k}</td><td>${g.total}</td><td>${g.succ}</td>
-      <td style="color:${fail>0?'#c0392b':'#888'}">${fail}</td>
-      <td>
-        <span style="color:${color};font-weight:600">${rate}%</span>
-        <span class="rate-bar"><span class="rate-bar-fill" style="width:${rate}%;background:${color}"></span></span>
-      </td>
+    const r=Math.round(g[k].s/g[k].t*100);
+    const f=g[k].t-g[k].s;
+    const c=r>=90?'#22c55e':r>=70?'#f59e0b':'#ef4444';
+    return `<tr class="${f>0?'fail-row':''}">
+      <td style="font-weight:500">${k}</td><td>${g[k].t}</td>
+      <td style="color:#22c55e;font-weight:500">${g[k].s}</td>
+      <td style="color:${f>0?'#ef4444':'#aaa'}">${f}</td>
+      <td><span style="color:${c};font-weight:700">${r}%</span><span class="rbar"><span class="rbar-fill" style="width:${r}%;background:${c}"></span></span></td>
     </tr>`;
   }).join('');
 }
 
-function renderChart(){
-  const dayGroups={};
-  filtered.forEach(d=>{
-    const key=d.timestamp.slice(0,10);
-    if(!dayGroups[key]) dayGroups[key]={succ:0,total:0};
-    dayGroups[key].total++;
-    if(d.status==='success') dayGroups[key].succ++;
-  });
-  const keys=Object.keys(dayGroups).sort();
-  const labels=keys;
-  const rates=keys.map(k=>dayGroups[k].total>0?Math.round(dayGroups[k].succ/dayGroups[k].total*100):0);
-  const bgColors=rates.map(r=>r>=90?'#1a7f4b':r>=70?'#1976d2':'#c0392b');
-  if(chartInst) chartInst.destroy();
-  chartInst=new Chart(document.getElementById('myChart'),{
-    type:'line',
-    data:{labels,datasets:[{
-      label:'일별 성공률(%)',
-      data:rates,
-      borderColor:'#1976d2',
-      backgroundColor:'rgba(25,118,210,0.08)',
-      pointBackgroundColor:bgColors,
-      pointRadius:5,
-      tension:0.3,
-      fill:true
-    }]},
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'성공률: '+ctx.raw+'%'}}},
-      scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}},x:{ticks:{maxTicksLimit:15}}}
-    }
-  });
-}
-
-function renderFailTable(){
-  const fails=filtered.filter(d=>d.status!=='success');
-  const tbody=document.getElementById('failBody');
-  if(fails.length===0){
-    tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:16px;color:#888;">실패 기록이 없습니다.</td></tr>';
-    return;
-  }
-  tbody.innerHTML=fails.map(d=>{
-    const isManual=(d.mode||'자동')==='수동';
-    return `<tr>
-      <td style="color:#c0392b">${d.timestamp}</td>
-      <td><span style="font-size:11px;padding:1px 6px;border-radius:4px;background:${isManual?'#fff3e0':'#e8f5e9'};color:${isManual?'#e65100':'#2e7d32'}">${isManual?'수동':'자동'}</span></td>
-      <td>${d.message}</td>
-    </tr>`;
-  }).join('');
+function toggleFilter(el){
+  const group=el.dataset.group, val=el.dataset.val;
+  if(group==='status') filterStatus=val;
+  else filterMode=val;
+  document.querySelectorAll(`.fbtn[data-group="${group}"]`).forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  renderTable();
 }
 
 function renderTable(){
-  const filter=document.getElementById('statusFilter').value;
-  const modeF=document.getElementById('modeFilter').value;
+  const q=(document.getElementById('msgSearch').value||'').toLowerCase();
   let data=filtered;
-  if(filter!=='all') data=data.filter(d=>filter==='success'?d.status==='success':d.status!=='success');
-  if(modeF!=='all') data=data.filter(d=>(d.mode||'자동')===modeF);
-  document.getElementById('detailBody').innerHTML=data.slice(0,200).map(d=>{
+  if(filterStatus==='success') data=data.filter(d=>d.status==='success');
+  else if(filterStatus==='fail') data=data.filter(d=>d.status!=='success');
+  if(filterMode!=='all') data=data.filter(d=>(d.mode||'자동')===filterMode);
+  if(q) data=data.filter(d=>d.message.toLowerCase().includes(q));
+  document.getElementById('detailBody').innerHTML=data.slice(0,300).map(d=>{
     const ok=d.status==='success';
-    const isManual=(d.mode||'자동')==='수동';
+    const m=(d.mode||'자동')==='수동';
     return `<tr class="${ok?'':'fail-row'}">
       <td style="color:#666">${d.timestamp}</td>
       <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
-      <td><span style="font-size:11px;padding:1px 6px;border-radius:4px;background:${isManual?'#fff3e0':'#e8f5e9'};color:${isManual?'#e65100':'#2e7d32'}">${isManual?'수동':'자동'}</span></td>
+      <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
       <td>${d.message}</td>
     </tr>`;
   }).join('');
@@ -495,6 +727,68 @@ function toggleDetail(){
   detailOpen=!detailOpen;
   document.getElementById('detailWrap').classList.toggle('hidden',!detailOpen);
   document.querySelector('.toggle-btn').textContent=detailOpen?'접기 ▲':'펼치기 ▼';
+}
+
+function renderFailSection(){
+  const fails=filtered.filter(d=>d.status!=='success');
+  const total=filtered.length;
+  const rate=total>0?Math.round(fails.length/total*100):0;
+  const types=new Set(fails.map(d=>d.message)).size;
+  const last=fails.length>0?fails[0]:null;
+
+  document.getElementById('f-total').textContent=fails.length;
+  document.getElementById('f-totalSub').textContent=`전체 ${total}건 중`;
+  document.getElementById('f-rate').textContent=rate+'%';
+  document.getElementById('f-rateSub').textContent=rate<=5?'✅ 양호':rate<=15?'⚠️ 주의':'🚨 높음';
+  document.getElementById('f-types').textContent=types;
+  document.getElementById('f-last').textContent=last?last.timestamp:'-';
+  document.getElementById('f-lastMsg').textContent=last?last.message:'실패 없음';
+
+  const counts={};
+  fails.forEach(d=>{counts[d.message]=(counts[d.message]||0)+1;});
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const max=sorted.length>0?sorted[0][1]:1;
+  const el=document.getElementById('msgTypeBar');
+  el.innerHTML=sorted.length===0
+    ?'<div style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</div>'
+    :sorted.map(([msg,cnt])=>`<div class="msg-row"><div class="msg-label" title="${msg}">${msg}</div><div class="msg-bar-bg"><div class="msg-bar-fill" style="width:${Math.round(cnt/max*100)}%"></div></div><div class="msg-count">${cnt}건</div></div>`).join('');
+
+  renderFailRateTable(currentFailTab);
+
+  document.getElementById('failAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 조회 기간 내 접속 실패 ${fails.length}건</div>`:'';
+  const tbody=document.getElementById('failBody');
+  tbody.innerHTML=fails.length===0
+    ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</td></tr>'
+    :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
+}
+
+function switchFailTab(type,el){
+  currentFailTab=type;
+  document.querySelectorAll('#tab-all .inner-tabs:last-of-type .itab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  renderFailRateTable(type);
+}
+
+function renderFailRateTable(type){
+  const g={};
+  filtered.forEach(d=>{
+    const dt=new Date(d.timestamp);
+    const k=type==='day'?d.timestamp.slice(0,10):type==='week'?getWeekKey(dt):d.timestamp.slice(0,7);
+    if(!g[k]) g[k]={t:0,f:0};
+    g[k].t++;
+    if(d.status!=='success') g[k].f++;
+  });
+  const keys=Object.keys(g).sort().reverse();
+  document.getElementById('failRateBody').innerHTML=keys.map(k=>{
+    const rate=Math.round(g[k].f/g[k].t*100);
+    const c=rate===0?'#22c55e':rate<=10?'#f59e0b':'#ef4444';
+    return `<tr class="${g[k].f>0?'fail-row':''}">
+      <td style="font-weight:500">${k}</td>
+      <td>${g[k].t}</td>
+      <td style="color:${g[k].f>0?'#ef4444':'#aaa'};font-weight:${g[k].f>0?'600':'400'}">${g[k].f}</td>
+      <td><span style="color:${c};font-weight:700">${rate}%</span><span class="rbar"><span class="rbar-fill" style="width:${rate}%;background:${c}"></span></span></td>
+    </tr>`;
+  }).join('');
 }
 
 load();
