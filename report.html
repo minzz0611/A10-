@@ -217,12 +217,7 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 
   <div class="section">
     <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>시간</th><th>결과</th><th>메시지</th></tr></thead>
-        <tbody id="todayTimeline"></tbody>
-      </table>
-    </div>
+    <div id="todayTimelineWrap" style="overflow-x:auto"></div>
   </div>
 
   <div class="section">
@@ -251,11 +246,6 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     <div class="stat green"><div class="stat-label">접속 성공</div><div class="stat-num green" id="a-success">-</div><div class="stat-sub" id="a-successRate">-</div></div>
     <div class="stat red"><div class="stat-label">접속 실패</div><div class="stat-num red" id="a-fail">-</div><div class="stat-sub" id="a-failRate">-</div></div>
     <div class="stat purple"><div class="stat-label">전체 성공률</div><div class="stat-num purple" id="a-rate">-</div><div class="stat-sub" id="a-rateSub">-</div></div>
-  </div>
-
-  <div style="display:none">
-    <canvas id="lineChart"></canvas>
-    <canvas id="donutChart"></canvas>
   </div>
 
   <div class="section">
@@ -356,7 +346,6 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 <script>
 let allData=[], filtered=[], calStart=null, calEnd=null;
 let calBaseYear, calBaseMonth;
-let lineInst=null, donutInst=null;
 let currentRateTab='day', currentFailTab='day', detailOpen=true;
 let filterStatus='all', filterMode='all';
 
@@ -532,21 +521,30 @@ function renderTodayTab(){
   document.getElementById('t-failRate').textContent=todayData.length>0?`실패율 ${100-rate}%`:'';
 
   const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
-  document.getElementById('todayTimeline').innerHTML=hours.map(h=>{
+  let tlHtml=`<div style="display:grid;grid-template-columns:repeat(${hours.length},1fr);gap:3px;width:100%">`;
+  hours.forEach(h=>{tlHtml+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
+  hours.forEach(h=>{
     const rec=todayData.find(d=>d.timestamp.slice(11,13)===h);
-    if(!rec) return `<tr><td style="color:#ccc">${h}시</td><td style="color:#ccc">-</td><td style="color:#ccc">미실행</td></tr>`;
-    const ok=rec.status==='success';
-    return `<tr class="${ok?'':'fail-row'}">
-      <td style="font-weight:500">${h}시</td>
-      <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
-      <td>${rec.message}</td>
-    </tr>`;
-  }).join('');
+    let bg='#f5f5f5',tc='#ccc',lb='-';
+    if(rec){
+      const ok=rec.status==='success';
+      if(ok){bg='#dcfce7';tc='#16a34a';lb='성공';}
+      else{bg='#fee2e2';tc='#dc2626';lb='실패';}
+    }
+    tlHtml+=`<div class="hm-cell" style="background:${bg};color:${tc}" title="${h}시: ${rec?rec.message:'미실행'}">${lb}</div>`;
+  });
+  tlHtml+='</div>';
+  tlHtml+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:#888;align-items:center">
+    <span><span style="display:inline-block;width:12px;height:12px;background:#dcfce7;border-radius:2px;vertical-align:middle;margin-right:3px"></span>성공</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#fee2e2;border-radius:2px;vertical-align:middle;margin-right:3px"></span>실패</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#f5f5f5;border-radius:2px;vertical-align:middle;margin-right:3px"></span>미실행</span>
+  </div>`;
+  document.getElementById('todayTimelineWrap').innerHTML=tlHtml;
 
   const t=today();
   const mon=new Date(t); mon.setDate(t.getDate()-t.getDay()+1);
-  const sun=new Date(mon); sun.setDate(mon.getDate()+4);
-  const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(sun);});
+  const fri=new Date(mon); fri.setDate(mon.getDate()+4);
+  const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(fri);});
   renderHeatmap('weekHeatmapWrap', weekData);
 
   const fails=todayData.filter(d=>d.status!=='success');
@@ -588,8 +586,7 @@ function renderHeatmap(targetId, data){
     const h=d.timestamp.slice(11,13);
     if(grid[dow+h]){grid[dow+h].t++;if(d.status==='success') grid[dow+h].s++;}
   });
-  const cw=56;
-  let html=`<div style="display:grid;grid-template-columns:28px ${hours.map(()=>cw+'px').join(' ')};gap:3px;min-width:${28+hours.length*(cw+3)}px">`;
+  let html=`<div style="display:grid;grid-template-columns:28px repeat(${hours.length},1fr);gap:3px;width:100%">`;
   html+='<div></div>';
   hours.forEach(h=>{html+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
   days.forEach(day=>{
