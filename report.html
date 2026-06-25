@@ -122,25 +122,12 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 .search-input:focus{outline:none;border-color:#4f6ef7}
 .toggle-btn{font-size:12px;color:#4f6ef7;cursor:pointer;background:none;border:none;font-family:inherit}
 .hidden{display:none}
-.timeline{display:flex;flex-direction:column;gap:6px;padding:4px 0}
-.tl-row{display:flex;align-items:center;gap:12px}
-.tl-hour{font-size:12px;color:#888;width:36px;text-align:right;font-weight:500}
-.tl-bar-bg{flex:1;height:32px;background:#f5f5f5;border-radius:6px;overflow:hidden}
-.tl-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:600;color:#fff}
-.tl-bar-fill.ok{background:#22c55e}
-.tl-bar-fill.fail{background:#ef4444}
-.tl-bar-fill.empty{background:#f0f0f0;color:#bbb}
-.tl-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap;min-width:40px;text-align:center}
-.tl-badge.ok{background:#dcfce7;color:#16a34a}
-.tl-badge.fail{background:#fee2e2;color:#dc2626}
-.tl-badge.empty{background:#f5f5f5;color:#ccc}
 @media print{.tab-nav,.header-right,.no-print{display:none!important}.tab-content{display:block!important}body{background:#fff}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<!-- 헤더 -->
 <div class="header">
   <div class="header-left">
     <h1>A10 이용가이드 접속 확인 보고서</h1>
@@ -152,13 +139,11 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
   </div>
 </div>
 
-<!-- 탭 네비게이션 -->
 <div class="tab-nav no-print">
   <button class="tab-nav-btn on" onclick="switchTab('today',this)">📅 금일 현황</button>
   <button class="tab-nav-btn" onclick="switchTab('all',this)">📊 전체 현황</button>
 </div>
 
-<!-- 전체현황 탭 조회조건 (탭 바로 아래) -->
 <div class="search-box no-print" id="searchBox" style="display:none">
   <div class="search-row">
     <span class="search-label">기간</span>
@@ -178,7 +163,6 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
   </div>
 </div>
 
-<!-- 달력 팝업 -->
 <div class="cal-overlay" id="calOverlay">
   <div class="cal-popup">
     <div class="cal-quick">
@@ -233,7 +217,12 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 
   <div class="section">
     <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
-    <div class="timeline" id="todayTimeline"></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>시간</th><th>결과</th><th>메시지</th></tr></thead>
+        <tbody id="todayTimeline"></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="section">
@@ -257,7 +246,6 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 <!-- ===== 탭2: 전체 현황 + 실패 요인 분석 ===== -->
 <div class="tab-content" id="tab-all" style="margin-top:16px">
 
-  <!-- 전체 현황 -->
   <div class="stats col4">
     <div class="stat blue"><div class="stat-label">전체 접속 시도</div><div class="stat-num blue" id="a-total">-</div><div class="stat-sub" id="a-period">-</div></div>
     <div class="stat green"><div class="stat-label">접속 성공</div><div class="stat-num green" id="a-success">-</div><div class="stat-sub" id="a-successRate">-</div></div>
@@ -270,7 +258,6 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     <canvas id="donutChart"></canvas>
   </div>
 
-
   <div class="section">
     <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 히트맵</span></div>
     <div id="allHeatmapWrap" style="overflow-x:auto"></div>
@@ -279,7 +266,7 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
   <div class="section">
     <div class="sec-title">
       <span class="sec-title-l"><span class="dot blue"></span>기간별 성공률 현황</span>
-      <div class="inner-tabs">
+      <div class="inner-tabs" id="rateTabs">
         <button class="itab on" onclick="switchRateTab('day',this)">일별</button>
         <button class="itab" onclick="switchRateTab('week',this)">주별</button>
         <button class="itab" onclick="switchRateTab('month',this)">월별</button>
@@ -320,10 +307,8 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     </div>
   </div>
 
-  <!-- 구분선 -->
   <hr class="section-divider"><span class="section-divider-label">실패 요인 분석</span>
 
-  <!-- 실패 요인 분석 -->
   <div class="stats col4" style="margin-top:8px">
     <div class="stat red"><div class="stat-label">총 실패 건수</div><div class="stat-num red" id="f-total">-</div><div class="stat-sub" id="f-totalSub">-</div></div>
     <div class="stat amber"><div class="stat-label">실패율</div><div class="stat-num amber" id="f-rate">-</div><div class="stat-sub" id="f-rateSub">-</div></div>
@@ -339,7 +324,7 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     <div class="section" style="margin-bottom:0">
       <div class="sec-title">
         <span class="sec-title-l"><span class="dot amber"></span>기간별 실패율</span>
-        <div class="inner-tabs">
+        <div class="inner-tabs" id="failTabs">
           <button class="itab on" onclick="switchFailTab('day',this)">일별</button>
           <button class="itab" onclick="switchFailTab('week',this)">주별</button>
           <button class="itab" onclick="switchFailTab('month',this)">월별</button>
@@ -549,9 +534,13 @@ function renderTodayTab(){
   const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
   document.getElementById('todayTimeline').innerHTML=hours.map(h=>{
     const rec=todayData.find(d=>d.timestamp.slice(11,13)===h);
-    if(!rec) return `<div class="tl-row"><div class="tl-hour">${h}시</div><div class="tl-bar-bg"><div class="tl-bar-fill empty" style="width:100%">미실행</div></div><span class="tl-badge empty">-</span></div>`;
+    if(!rec) return `<tr><td style="color:#ccc">${h}시</td><td style="color:#ccc">-</td><td style="color:#ccc">미실행</td></tr>`;
     const ok=rec.status==='success';
-    return `<div class="tl-row"><div class="tl-hour">${h}시</div><div class="tl-bar-bg"><div class="tl-bar-fill ${ok?'ok':'fail'}" style="width:100%">${rec.message}</div></div><span class="tl-badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></div>`;
+    return `<tr class="${ok?'':'fail-row'}">
+      <td style="font-weight:500">${h}시</td>
+      <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
+      <td>${rec.message}</td>
+    </tr>`;
   }).join('');
 
   const t=today();
@@ -562,8 +551,7 @@ function renderTodayTab(){
 
   const fails=todayData.filter(d=>d.status!=='success');
   document.getElementById('todayFailAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 오늘 접속 실패 ${fails.length}건이 발견됐습니다.</div>`:'';
-  const tbody=document.getElementById('todayFailBody');
-  tbody.innerHTML=fails.length===0
+  document.getElementById('todayFailBody').innerHTML=fails.length===0
     ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">오늘 실패 기록이 없습니다. ✅</td></tr>'
     :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
 }
@@ -584,36 +572,9 @@ function renderAllTab(){
   document.getElementById('a-failRate').textContent=total>0?`전체의 ${100-rate}%`:'';
   document.getElementById('a-rateSub').textContent=rate>=90?'✅ 정상':rate>=70?'⚠️ 주의':'🚨 점검 필요';
   document.getElementById('a-rate').className='stat-num '+(rate>=90?'purple':rate>=70?'amber':'red');
-  renderLineChart();
-  renderDonutChart();
   renderHeatmap('allHeatmapWrap', filtered);
   renderRateTable(currentRateTab);
   renderTable();
-}
-
-function renderLineChart(){
-  const g={};
-  filtered.forEach(d=>{const k=d.timestamp.slice(0,10);if(!g[k]) g[k]={s:0,t:0};g[k].t++;if(d.status==='success') g[k].s++;});
-  const keys=Object.keys(g).sort();
-  const rates=keys.map(k=>g[k].t>0?Math.round(g[k].s/g[k].t*100):0);
-  const colors=rates.map(r=>r>=90?'#22c55e':r>=70?'#f59e0b':'#ef4444');
-  if(lineInst) lineInst.destroy();
-  lineInst=new Chart(document.getElementById('lineChart'),{
-    type:'line',
-    data:{labels:keys,datasets:[{label:'성공률(%)',data:rates,borderColor:'#4f6ef7',backgroundColor:'rgba(79,110,247,0.06)',pointBackgroundColor:colors,pointRadius:4,pointHoverRadius:6,tension:0.3,fill:true,borderWidth:2}]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'성공률: '+ctx.raw+'%'}}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'#f5f5f5'}},x:{ticks:{maxTicksLimit:15,font:{size:10}},grid:{display:false}}}}
-  });
-}
-
-function renderDonutChart(){
-  const succ=filtered.filter(d=>d.status==='success').length;
-  const fail=filtered.length-succ;
-  if(donutInst) donutInst.destroy();
-  donutInst=new Chart(document.getElementById('donutChart'),{
-    type:'doughnut',
-    data:{labels:['성공','실패'],datasets:[{data:[succ,fail],backgroundColor:['#22c55e','#ef4444'],borderWidth:0,hoverOffset:4}]},
-    options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:14}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}건 (${filtered.length>0?Math.round(ctx.raw/filtered.length*100):0}%)`}}}}
-  });
 }
 
 function renderHeatmap(targetId, data){
@@ -667,7 +628,7 @@ function getWeekKey(dt){
 
 function switchRateTab(type,el){
   currentRateTab=type;
-  document.querySelectorAll('#tab-all .inner-tabs:first-of-type .itab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('#rateTabs .itab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
   renderRateTable(type);
 }
@@ -748,23 +709,21 @@ function renderFailSection(){
   fails.forEach(d=>{counts[d.message]=(counts[d.message]||0)+1;});
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
   const max=sorted.length>0?sorted[0][1]:1;
-  const el=document.getElementById('msgTypeBar');
-  el.innerHTML=sorted.length===0
+  document.getElementById('msgTypeBar').innerHTML=sorted.length===0
     ?'<div style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</div>'
     :sorted.map(([msg,cnt])=>`<div class="msg-row"><div class="msg-label" title="${msg}">${msg}</div><div class="msg-bar-bg"><div class="msg-bar-fill" style="width:${Math.round(cnt/max*100)}%"></div></div><div class="msg-count">${cnt}건</div></div>`).join('');
 
   renderFailRateTable(currentFailTab);
 
   document.getElementById('failAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 조회 기간 내 접속 실패 ${fails.length}건</div>`:'';
-  const tbody=document.getElementById('failBody');
-  tbody.innerHTML=fails.length===0
+  document.getElementById('failBody').innerHTML=fails.length===0
     ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</td></tr>'
     :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
 }
 
 function switchFailTab(type,el){
   currentFailTab=type;
-  document.querySelectorAll('#tab-all .inner-tabs:last-of-type .itab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('#failTabs .itab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
   renderFailRateTable(type);
 }
