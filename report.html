@@ -219,10 +219,10 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 <!-- ===== 탭1: 금일 현황 ===== -->
 <div class="tab-content on" id="tab-today" style="margin-top:16px">
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;height:100%">
 
     <!-- 좌측 -->
-    <div>
+    <div style="display:flex;flex-direction:column">
       <!-- 금일 접속 현황 카드 -->
       <div style="background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
         <div>
@@ -275,22 +275,17 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     </div>
 
     <!-- 우측 -->
-    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
-      <!-- 오늘 실패 목록 -->
-      <div class="section" style="margin-bottom:0;flex:1;display:flex;flex-direction:column;min-height:0">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>오늘 실패 목록</span></div>
-        <div id="todayFailAlert"></div>
-        <div style="overflow-y:auto;flex:1">
-          <table class="tbl">
-            <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
-            <tbody id="todayFailBody"></tbody>
-          </table>
-        </div>
-      </div>
-
+    <div style="display:flex;flex-direction:column;gap:14px">
       <!-- 오늘 전체 접속 기록 -->
-      <div class="section" style="margin-bottom:0;flex:1;display:flex;flex-direction:column;min-height:0">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span></div>
+      <div class="section" style="margin-bottom:0;display:flex;flex-direction:column;height:100%">
+        <div class="sec-title">
+          <span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span>
+          <div style="display:flex;gap:4px">
+            <button class="fbtn on" data-group="todayStatus" data-val="all" onclick="toggleTodayFilter(this)">전체</button>
+            <button class="fbtn" data-group="todayStatus" data-val="success" onclick="toggleTodayFilter(this)">성공</button>
+            <button class="fbtn" data-group="todayStatus" data-val="fail" onclick="toggleTodayFilter(this)">실패</button>
+          </div>
+        </div>
         <div style="overflow-y:auto;flex:1">
           <table class="tbl">
             <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
@@ -639,17 +634,29 @@ function renderTodayTab(){
   const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(fri);});
   renderHeatmap('weekHeatmapWrap', weekData);
 
-  // 오늘 실패 목록
-  const fails=todayData.filter(d=>d.status!=='success');
-  document.getElementById('todayFailAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 오늘 접속 실패 ${fails.length}건이 발견됐습니다.</div>`:'';
-  document.getElementById('todayFailBody').innerHTML=fails.length===0
-    ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">오늘 실패 기록이 없습니다. ✅</td></tr>'
-    :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
+  
+  // 오늘 전체 접속 기록 (필터 초기화 후 렌더)
+  window._todayData = todayData;
+  window._todayStatusFilter = 'all';
+  renderTodayAllBody();
+}
 
-  // 오늘 전체 접속 기록
-  document.getElementById('todayAllBody').innerHTML=todayData.length===0
-    ?'<tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa">오늘 접속 기록이 없습니다.</td></tr>'
-    :todayData.map(d=>{
+function toggleTodayFilter(el){
+  window._todayStatusFilter = el.dataset.val;
+  document.querySelectorAll('.fbtn[data-group="todayStatus"]').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  renderTodayAllBody();
+}
+
+function renderTodayAllBody(){
+  const todayData = window._todayData || [];
+  const f = window._todayStatusFilter || 'all';
+  let data = todayData;
+  if(f==='success') data=data.filter(d=>d.status==='success');
+  else if(f==='fail') data=data.filter(d=>d.status!=='success');
+  document.getElementById('todayAllBody').innerHTML=data.length===0
+    ?'<tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa">접속 기록이 없습니다.</td></tr>'
+    :data.map(d=>{
       const ok=d.status==='success';
       const m=(d.mode||'자동')==='수동';
       return `<tr class="${ok?'':'fail-row'}">
