@@ -236,6 +236,16 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     </div>
   </div>
 
+  <div class="section">
+    <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
+        <tbody id="todayAllBody"></tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <!-- ===== 탭2: 전체 현황 + 실패 요인 분석 ===== -->
@@ -520,6 +530,7 @@ function renderTodayTab(){
   document.getElementById('t-successRate').textContent=todayData.length>0?`성공률 ${rate}%`:'';
   document.getElementById('t-failRate').textContent=todayData.length>0?`실패율 ${100-rate}%`:'';
 
+  // 타임라인
   const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
   let tlHtml=`<div style="display:grid;grid-template-columns:repeat(${hours.length},1fr);gap:3px;width:100%">`;
   hours.forEach(h=>{tlHtml+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
@@ -541,17 +552,33 @@ function renderTodayTab(){
   </div>`;
   document.getElementById('todayTimelineWrap').innerHTML=tlHtml;
 
+  // 금주 히트맵
   const t=today();
   const mon=new Date(t); mon.setDate(t.getDate()-t.getDay()+1);
   const fri=new Date(mon); fri.setDate(mon.getDate()+4);
   const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(fri);});
   renderHeatmap('weekHeatmapWrap', weekData);
 
+  // 오늘 실패 목록
   const fails=todayData.filter(d=>d.status!=='success');
   document.getElementById('todayFailAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 오늘 접속 실패 ${fails.length}건이 발견됐습니다.</div>`:'';
   document.getElementById('todayFailBody').innerHTML=fails.length===0
     ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">오늘 실패 기록이 없습니다. ✅</td></tr>'
     :fails.map(d=>{const m=(d.mode||'자동')==='수동';return `<tr><td style="color:#dc2626;font-weight:500">${d.timestamp}</td><td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td><td>${d.message}</td></tr>`;}).join('');
+
+  // 오늘 전체 접속 기록
+  document.getElementById('todayAllBody').innerHTML=todayData.length===0
+    ?'<tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa">오늘 접속 기록이 없습니다.</td></tr>'
+    :todayData.map(d=>{
+      const ok=d.status==='success';
+      const m=(d.mode||'자동')==='수동';
+      return `<tr class="${ok?'':'fail-row'}">
+        <td style="color:#666">${d.timestamp}</td>
+        <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
+        <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
+        <td>${d.message}</td>
+      </tr>`;
+    }).join('');
 }
 
 function renderAllTab(){
