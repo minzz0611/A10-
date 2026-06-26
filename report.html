@@ -11,10 +11,10 @@
 body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:16px}
 .wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
 .header{background:#1a1a2e;color:#fff;border-radius:12px;padding:20px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.header-left h1{font-size:18px;font-weight:600;margin-bottom:4px}
-.header-left p{font-size:12px;color:#8b8fa8}
-.header-right{display:flex;gap:8px}
-.btn{border:none;border-radius:6px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit}
+.header-left h1{font-size:20px;font-weight:700;margin-bottom:4px}
+.header-left p{font-size:13px;color:#8b8fa8}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.btn{border:none;border-radius:6px;padding:7px 16px;font-size:14px;cursor:pointer;font-family:inherit}
 .btn-white{background:#fff;color:#1a1a2e;font-weight:500}
 .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)}
 .btn-outline:hover{background:rgba(255,255,255,0.1)}
@@ -25,25 +25,25 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .tab-content.on{display:block}
 .search-box{background:#fff;border-radius:0 0 10px 10px;padding:12px 20px;margin-bottom:16px;box-shadow:0 2px 4px rgba(0,0,0,0.06);border-top:1px solid #f0f0f0}
 .search-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.search-label{font-size:12px;color:#666;font-weight:500;min-width:36px}
-.date-input{border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;font-size:12px;width:108px;cursor:pointer;font-family:inherit;background:#fafafa}
+.search-label{font-size:14px;color:#666;font-weight:500;min-width:36px}
+.date-input{border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;font-size:14px;width:116px;cursor:pointer;font-family:inherit;background:#fafafa}
 .quick-btns{display:flex;gap:4px;flex-wrap:wrap}
-.qbtn{border:1px solid #e0e0e0;background:#fff;border-radius:5px;padding:4px 10px;font-size:12px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
+.qbtn{border:1px solid #e0e0e0;background:#fff;border-radius:5px;padding:4px 10px;font-size:14px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
 .qbtn:hover,.qbtn.on{background:#4f6ef7;color:#fff;border-color:#4f6ef7}
-.search-btn{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:7px 20px;font-size:12px;cursor:pointer;font-family:inherit;margin-left:auto}
+.search-btn{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:7px 20px;font-size:14px;cursor:pointer;font-family:inherit;margin-left:auto}
 .dv{width:1px;height:22px;background:#e0e0e0}
 .cal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center}
 .cal-overlay.show{display:flex}
 .cal-popup{background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.18);min-width:560px}
 .cal-quick{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
 .cal-months{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.cal-month-title{text-align:center;font-weight:600;font-size:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px}
+.cal-month-title{text-align:center;font-weight:600;font-size:15px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px}
 .cal-nav{cursor:pointer;color:#4f6ef7;font-size:18px;padding:0 4px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-.cal-grid .dow{font-size:11px;color:#aaa;padding:4px 0;font-weight:500}
+.cal-grid .dow{font-size:12px;color:#aaa;padding:4px 0;font-weight:500}
 .cal-grid .dow:first-child{color:#e53935}
 .cal-grid .dow:last-child{color:#4f6ef7}
-.cal-day{padding:5px 2px;border-radius:5px;cursor:pointer;font-size:12px}
+.cal-day{padding:5px 2px;border-radius:5px;cursor:pointer;font-size:13px}
 .cal-day:hover{background:#eef1ff}
 .cal-day.other{color:#ddd;cursor:default}
 .cal-day.sun{color:#e53935}
@@ -52,15 +52,10 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .cal-day.in-range{background:#eef1ff}
 .cal-day.today-mark{font-weight:700;text-decoration:underline}
 .cal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid #f0f0f0}
-.sel-range{font-size:12px;color:#666}
+.sel-range{font-size:13px;color:#666}
 .cal-btns{display:flex;gap:8px}
-.cal-cancel{border:1px solid #e0e0e0;background:#fff;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-family:inherit}
-.cal-confirm{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-family:inherit}
-.status-banner{border-radius:10px;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:500}
-.status-banner.ok{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
-.status-banner.warn{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
-.status-banner.danger{background:#fee2e2;color:#dc2626;border:1px solid #fecaca}
-.last-check{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:12px;display:flex;align-items:center;gap:8px}
+.cal-cancel{border:1px solid #e0e0e0;background:#fff;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;font-family:inherit}
+.cal-confirm{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;font-family:inherit}
 .stats{display:grid;gap:14px;margin-bottom:14px}
 .stats.col4{grid-template-columns:repeat(4,1fr)}
 .stats.col3{grid-template-columns:repeat(3,1fr)}
@@ -84,10 +79,10 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .dot.blue{background:#4f6ef7}.dot.green{background:#22c55e}.dot.red{background:#ef4444}.dot.amber{background:#f59e0b}.dot.purple{background:#a855f7}
 .section-divider{border:none;border-top:2px dashed #e0e0e0;margin:24px 0;position:relative}
-.section-divider-label{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#f0f2f5;padding:0 12px;font-size:11px;color:#aaa;font-weight:600;letter-spacing:.5px;white-space:nowrap}
+.section-divider-label{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#f0f2f5;padding:0 12px;font-size:12px;color:#aaa;font-weight:600;letter-spacing:.5px;white-space:nowrap}
 .grid2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
 .inner-tabs{display:flex;gap:2px;background:#f5f5f5;border-radius:6px;padding:2px}
-.itab{border:none;background:transparent;border-radius:5px;padding:4px 12px;font-size:12px;cursor:pointer;color:#666;font-family:inherit;transition:all .15s}
+.itab{border:none;background:transparent;border-radius:5px;padding:4px 12px;font-size:13px;cursor:pointer;color:#666;font-family:inherit;transition:all .15s}
 .itab.on{background:#fff;color:#4f6ef7;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .tbl-wrap{overflow-x:auto;max-height:380px;overflow-y:auto}
 .tbl{width:100%;border-collapse:collapse;font-size:14px}
@@ -102,38 +97,37 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .mode-auto{background:#eff6ff;color:#3b82f6}
 .mode-manual{background:#fff7ed;color:#ea580c}
 .rate-table{width:100%;border-collapse:collapse;font-size:14px}
-.rate-table th{background:#f8f9fc;padding:8px 12px;text-align:left;color:#888;font-size:11px;font-weight:600;border-bottom:1px solid #f0f0f0}
+.rate-table th{background:#f8f9fc;padding:8px 12px;text-align:left;color:#888;font-size:12px;font-weight:600;border-bottom:1px solid #f0f0f0}
 .rate-table td{padding:8px 12px;border-bottom:1px solid #f8f8f8}
 .rate-table tr.fail-row td{background:#fff8f8}
 .rbar{height:6px;background:#f0f0f0;border-radius:3px;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
 .rbar-fill{height:100%;border-radius:3px}
 .hm-cell{border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
-.fail-alert{background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:#dc2626;font-weight:500}
+.fail-alert{background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#dc2626;font-weight:500}
 .msg-type-bar{display:flex;flex-direction:column;gap:8px}
-.msg-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.msg-row{display:flex;align-items:center;gap:10px;font-size:13px}
 .msg-label{width:300px;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .msg-bar-bg{flex:1;height:8px;background:#f5f5f5;border-radius:4px;overflow:hidden}
 .msg-bar-fill{height:100%;background:#ef4444;border-radius:4px}
 .msg-count{min-width:36px;text-align:right;color:#dc2626;font-weight:600}
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
-.fbtn{border:1px solid #e0e0e0;background:#fff;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
+.fbtn{border:1px solid #e0e0e0;background:#fff;border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
 .fbtn:hover{border-color:#4f6ef7;color:#4f6ef7}
 .fbtn.on{background:#4f6ef7;color:#fff;border-color:#4f6ef7}
-.search-input{border:1px solid #e0e0e0;border-radius:6px;padding:5px 12px;font-size:12px;font-family:inherit;width:200px;margin-left:auto}
+.search-input{border:1px solid #e0e0e0;border-radius:6px;padding:5px 12px;font-size:13px;font-family:inherit;width:200px;margin-left:auto}
 .search-input:focus{outline:none;border-color:#4f6ef7}
-.toggle-btn{font-size:12px;color:#4f6ef7;cursor:pointer;background:none;border:none;font-family:inherit}
+.toggle-btn{font-size:13px;color:#4f6ef7;cursor:pointer;background:none;border:none;font-family:inherit}
 .hidden{display:none}
-@media print{.tab-nav,.header-right,.no-print{display:none!important}.tab-content{display:block!important}body{background:#fff}}
 .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;align-items:center;justify-content:center}
 .popup-overlay.show{display:flex}
-.popup-box{background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.18);width:620px;max-width:92vw;max-height:80vh;display:flex;flex-direction:column}
+.popup-box{background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.18);width:620px;max-width:92vw;max-height:90vh;display:flex;flex-direction:column}
 .popup-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.popup-title{font-size:14px;font-weight:600;color:#1a1a2e}
+.popup-title{font-size:15px;font-weight:600;color:#1a1a2e}
 .popup-close{cursor:pointer;color:#aaa;font-size:20px;line-height:1;background:none;border:none;font-family:inherit}
 .popup-close:hover{color:#333}
 .popup-body{overflow:auto;flex:1}
-.popup-tbl{border-collapse:collapse;font-size:12px;width:max-content;min-width:100%}
-.popup-tbl thead th{background:#f8f9fc;padding:9px 14px;text-align:left;color:#888;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:2;white-space:nowrap}
+.popup-tbl{border-collapse:collapse;font-size:13px;width:max-content;min-width:100%}
+.popup-tbl thead th{background:#f8f9fc;padding:9px 14px;text-align:left;color:#888;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:2;white-space:nowrap}
 .popup-tbl thead th.sticky-col{position:sticky;left:0;z-index:3;background:#f8f9fc}
 .popup-tbl tbody td{padding:9px 14px;border-bottom:1px solid #f8f8f8;color:#444;white-space:nowrap}
 .popup-tbl tbody td.sticky-col{position:sticky;left:0;z-index:1;background:#fff}
@@ -141,6 +135,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .popup-tbl tbody tr.fail-row td.sticky-col{background:#fff8f8}
 .popup-tbl tbody tr:hover td{background:#fafbff}
 .popup-tbl tbody tr:hover td.sticky-col{background:#fafbff}
+@media print{.tab-nav,.header-right,.no-print{display:none!important}.tab-content{display:block!important}body{background:#fff}}
 </style>
 </head>
 <body>
@@ -150,10 +145,10 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
   <div class="header-left">
     <h1>A10 이용가이드 접속 확인 보고서</h1>
     <p id="reportMeta">-</p>
-    </div>
-  <div class="header-right" style="flex-direction:column;align-items:flex-end;gap:10px">
+  </div>
+  <div class="header-right">
     <button class="btn btn-outline" onclick="load()">↻ 새로고침</button>
-    <p style="font-size:12px;color:#8b8fa8;text-align:right">🕐 마지막 접속 확인: <strong id="lastCheckTime" style="color:#fff">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong></p>
+    <p style="font-size:13px;color:#8b8fa8;text-align:right">🕐 마지막 접속 확인: <strong id="lastCheckTime" style="color:#fff">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong></p>
   </div>
 </div>
 
@@ -170,7 +165,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     <input type="text" class="date-input" id="endDate" readonly placeholder="종료일" onclick="openCal()">
     <div class="dv"></div>
     <div class="quick-btns">
-      <button class="qbtn" onclick="setQuick('today')">오늘</button>
+      <button class="qbtn" onclick="setQuick('today')">금일</button>
       <button class="qbtn" onclick="setQuick('yesterday')">전일</button>
       <button class="qbtn" onclick="setQuick('week')">주간</button>
       <button class="qbtn" onclick="setQuick('lastweek')">전주</button>
@@ -184,7 +179,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 <div class="cal-overlay" id="calOverlay">
   <div class="cal-popup">
     <div class="cal-quick">
-      <button class="qbtn" onclick="setQuickCal('today')">오늘</button>
+      <button class="qbtn" onclick="setQuickCal('today')">금일</button>
       <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
       <button class="qbtn" onclick="setQuickCal('week')">주간</button>
       <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
@@ -215,37 +210,36 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
   </div>
 </div>
 
-
-<!-- ===== 탭1: 금일 현황 ===== -->
+<!-- 탭1: 금일 현황 -->
 <div class="tab-content on" id="tab-today" style="margin-top:16px">
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;height:100%">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 
     <!-- 좌측 -->
-    <div style="display:flex;flex-direction:column">
+    <div style="display:flex;flex-direction:column;gap:14px">
+
       <!-- 금일 접속 현황 카드 -->
-      <div style="background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+      <div style="background:#fff;border-radius:10px;padding:28px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between">
         <div>
           <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:16px;display:flex;align-items:center;gap:6px">
-            <span style="width:8px;height:8px;border-radius:50%;background:#000000;display:inline-block"></span>
+            <span style="width:8px;height:8px;border-radius:50%;background:#4f6ef7;display:inline-block"></span>
             금일 접속 현황
           </div>
           <div style="display:flex;flex-direction:column;gap:12px;padding-left:14px">
             <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
-              <span style="width:7px;height:7px;border-radius:50%;background:#4f6ef7;display:inline-block;flex-shrink:0"></span>
-              <span style="min-width:130px">전체 접속 시도</span>
+                       <span style="color:#000000;font-size:16px;font-weight:700;flex-shrink:0">›</span>
+                       <span style="min-width:130px">전체 접속 시도</span>
               <strong id="t-total" style="color:#1a1a2e;min-width:40px;text-align:right">-</strong>
               <span style="color:#aaa;font-size:13px">건</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
-              <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;flex-shrink:0"></span>
-              <span style="min-width:130px">금일 성공</span>
+              <span style="color:#000000;font-size:16px;font-weight:700;flex-shrink:0">›</span>
+                       <span style="min-width:130px">금일 성공</span>
               <strong id="t-success" style="color:#22c55e;min-width:40px;text-align:right">-</strong>
               <span style="color:#aaa;font-size:13px">건</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
-              <span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;flex-shrink:0"></span>
-              <span style="min-width:130px">금일 실패</span>
+              <span style="color:#000000;font-size:16px;font-weight:700;flex-shrink:0">›</span>
+                       <span style="min-width:130px">금일 실패</span>
               <strong id="t-fail" style="color:#ef4444;min-width:40px;text-align:right">-</strong>
               <span style="color:#aaa;font-size:13px">건</span>
             </div>
@@ -261,25 +255,24 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
         </div>
       </div>
 
-      <!-- 시간대별 접속 현황 -->
-      <div class="section">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
+      <!-- 시간대별 현황 -->
+      <div class="section" style="margin-bottom:0">
+        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>금일 시간대별 접속 현황 (9시 ~ 18시)</span></div>
         <div id="todayTimelineWrap" style="overflow-x:auto"></div>
       </div>
 
       <!-- 금주 히트맵 -->
-      <div class="section">
+      <div class="section" style="margin-bottom:0">
         <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 히트맵</span></div>
         <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
       </div>
     </div>
 
     <!-- 우측 -->
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <!-- 오늘 전체 접속 기록 -->
-      <div class="section" style="margin-bottom:0;display:flex;flex-direction:column;height:100%">
+    <div>
+      <div class="section" style="margin-bottom:0;height:100%;display:flex;flex-direction:column">
         <div class="sec-title">
-          <span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span>
+          <span class="sec-title-l"><span class="dot blue"></span>금일 접속 기록</span>
           <div style="display:flex;gap:4px">
             <button class="fbtn on" data-group="todayStatus" data-val="all" onclick="toggleTodayFilter(this)">전체</button>
             <button class="fbtn" data-group="todayStatus" data-val="success" onclick="toggleTodayFilter(this)">성공</button>
@@ -296,16 +289,9 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     </div>
 
   </div>
-
 </div>
 
-
-
-
-
-</div>
-
-<!-- ===== 탭2: 전체 현황 + 실패 요인 분석 ===== -->
+<!-- 탭2: 전체 현황 + 실패 요인 분석 -->
 <div class="tab-content" id="tab-all" style="margin-top:16px">
 
   <div class="stats col4">
@@ -343,12 +329,12 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
       <button class="toggle-btn" onclick="toggleDetail()">접기 ▲</button>
     </div>
     <div class="filter-bar no-print">
-      <span style="font-size:12px;color:#888;font-weight:500">상태</span>
+      <span style="font-size:13px;color:#888;font-weight:500">상태</span>
       <button class="fbtn on" data-group="status" data-val="all" onclick="toggleFilter(this)">전체</button>
       <button class="fbtn" data-group="status" data-val="success" onclick="toggleFilter(this)">성공</button>
       <button class="fbtn" data-group="status" data-val="fail" onclick="toggleFilter(this)">실패</button>
       <div class="dv"></div>
-      <span style="font-size:12px;color:#888;font-weight:500">구분</span>
+      <span style="font-size:13px;color:#888;font-weight:500">구분</span>
       <button class="fbtn on" data-group="mode" data-val="all" onclick="toggleFilter(this)">전체</button>
       <button class="fbtn" data-group="mode" data-val="자동" onclick="toggleFilter(this)">자동</button>
       <button class="fbtn" data-group="mode" data-val="수동" onclick="toggleFilter(this)">수동</button>
@@ -370,7 +356,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     <div class="stat red"><div class="stat-label">총 실패 건수</div><div class="stat-num red" id="f-total">-</div><div class="stat-sub" id="f-totalSub">-</div></div>
     <div class="stat amber"><div class="stat-label">실패율</div><div class="stat-num amber" id="f-rate">-</div><div class="stat-sub" id="f-rateSub">-</div></div>
     <div class="stat" style="border-top-color:#8b5cf6"><div class="stat-label">실패 유형 수</div><div class="stat-num" style="color:#8b5cf6" id="f-types">-</div><div class="stat-sub">고유 오류 메시지</div></div>
-    <div class="stat" style="border-top-color:#06b6d4"><div class="stat-label">최근 실패</div><div class="stat-num" style="color:#06b6d4;font-size:13px;line-height:1.4" id="f-last">-</div><div class="stat-sub" id="f-lastMsg">-</div></div>
+    <div class="stat" style="border-top-color:#06b6d4"><div class="stat-label">최근 실패</div><div class="stat-num" style="color:#06b6d4;font-size:14px;line-height:1.4" id="f-last">-</div><div class="stat-sub" id="f-lastMsg">-</div></div>
   </div>
 
   <div class="grid2" style="margin-bottom:14px">
@@ -408,6 +394,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
   </div>
 
 </div>
+
 <!-- 히트맵 팝업 -->
 <div class="popup-overlay" id="hmPopup" onclick="closeHmPopup(event)">
   <div class="popup-box">
@@ -420,6 +407,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     </div>
   </div>
 </div>
+
 </div>
 
 <script>
@@ -585,30 +573,17 @@ function renderTodayTab(){
   document.getElementById('t-date').textContent=ts;
   document.getElementById('t-rateNum').textContent=rate!==null?rate+'%':'-';
 
-  // 도넛 차트
   if(window._todayDonutInst) window._todayDonutInst.destroy();
   window._todayDonutInst=new Chart(document.getElementById('todayDonut'),{
     type:'doughnut',
-    data:{
-      labels:['성공','실패'],
-      datasets:[{
-        data:[succ, fail>0?fail:0],
-        backgroundColor:['#4f6ef7','#fee2e2'],
-        borderWidth:0,
-        hoverOffset:4
-      }]
-    },
-    options:{
-      responsive:true,
-      cutout:'72%',
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}건`}}}
-    }
+    data:{labels:['성공','실패'],datasets:[{data:[succ,fail>0?fail:0.001],backgroundColor:['#4f6ef7','#fee2e2'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label==='실패'&&fail===0?null:`${ctx.label}: ${ctx.raw}건`}}}}
   });
 
   // 타임라인
   const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
   let tlHtml=`<div style="display:grid;grid-template-columns:repeat(${hours.length},1fr);gap:3px;width:100%">`;
-  hours.forEach(h=>{tlHtml+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
+  hours.forEach(h=>{tlHtml+=`<div style="text-align:center;font-size:12px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
   hours.forEach(h=>{
     const rec=todayData.find(d=>d.timestamp.slice(11,13)===h);
     let bg='#f5f5f5',tc='#ccc',lb='-';
@@ -617,10 +592,10 @@ function renderTodayTab(){
       if(ok){bg='#dcfce7';tc='#16a34a';lb='성공';}
       else{bg='#fee2e2';tc='#dc2626';lb='실패';}
     }
-    tlHtml+=`<div class="hm-cell" style="background:${bg};color:${tc}" title="${h}시: ${rec?rec.message:'미실행'}">${lb}</div>`;
+    tlHtml+=`<div class="hm-cell" style="background:${bg};color:${tc};cursor:${rec?'default':'default'}" title="${h}시: ${rec?rec.message:'미실행'}">${lb}</div>`;
   });
   tlHtml+='</div>';
-  tlHtml+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:#888;align-items:center">
+  tlHtml+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:12px;color:#888;align-items:center">
     <span><span style="display:inline-block;width:12px;height:12px;background:#dcfce7;border-radius:2px;vertical-align:middle;margin-right:3px"></span>성공</span>
     <span><span style="display:inline-block;width:12px;height:12px;background:#fee2e2;border-radius:2px;vertical-align:middle;margin-right:3px"></span>실패</span>
     <span><span style="display:inline-block;width:12px;height:12px;background:#f5f5f5;border-radius:2px;vertical-align:middle;margin-right:3px"></span>미실행</span>
@@ -634,24 +609,26 @@ function renderTodayTab(){
   const weekData=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=fmt(mon)&&dt<=fmt(fri);});
   renderHeatmap('weekHeatmapWrap', weekData);
 
-  
-  // 오늘 전체 접속 기록 (필터 초기화 후 렌더)
-  window._todayData = todayData;
-  window._todayStatusFilter = 'all';
+  // 금일 접속 기록
+  window._todayData=todayData;
+  window._todayStatusFilter='all';
+  document.querySelectorAll('.fbtn[data-group="todayStatus"]').forEach(b=>{
+    b.classList.toggle('on', b.dataset.val==='all');
+  });
   renderTodayAllBody();
 }
 
 function toggleTodayFilter(el){
-  window._todayStatusFilter = el.dataset.val;
+  window._todayStatusFilter=el.dataset.val;
   document.querySelectorAll('.fbtn[data-group="todayStatus"]').forEach(b=>b.classList.remove('on'));
   el.classList.add('on');
   renderTodayAllBody();
 }
 
 function renderTodayAllBody(){
-  const todayData = window._todayData || [];
-  const f = window._todayStatusFilter || 'all';
-  let data = todayData;
+  const todayData=window._todayData||[];
+  const f=window._todayStatusFilter||'all';
+  let data=todayData;
   if(f==='success') data=data.filter(d=>d.status==='success');
   else if(f==='fail') data=data.filter(d=>d.status!=='success');
   document.getElementById('todayAllBody').innerHTML=data.length===0
@@ -702,9 +679,9 @@ function renderHeatmap(targetId, data){
   });
   let html=`<div style="display:grid;grid-template-columns:28px repeat(${hours.length},1fr);gap:3px;width:100%">`;
   html+='<div></div>';
-  hours.forEach(h=>{html+=`<div style="text-align:center;font-size:11px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
+  hours.forEach(h=>{html+=`<div style="text-align:center;font-size:12px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
   days.forEach(day=>{
-    html+=`<div style="display:flex;align-items:center;justify-content:center;font-size:11px;color:#666;font-weight:600">${day}</div>`;
+    html+=`<div style="display:flex;align-items:center;justify-content:center;font-size:12px;color:#666;font-weight:600">${day}</div>`;
     hours.forEach(h=>{
       const c=grid[day+h];
       const r=c.t>0?Math.round(c.s/c.t*100):null;
@@ -720,7 +697,7 @@ function renderHeatmap(targetId, data){
     });
   });
   html+='</div>';
-  html+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:#888;align-items:center">
+  html+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:12px;color:#888;align-items:center">
     <span style="font-weight:500">범례</span>
     <span><span style="display:inline-block;width:12px;height:12px;background:#dcfce7;border-radius:2px;vertical-align:middle;margin-right:3px"></span>100%</span>
     <span><span style="display:inline-block;width:12px;height:12px;background:#bbf7d0;border-radius:2px;vertical-align:middle;margin-right:3px"></span>90%+</span>
@@ -807,7 +784,6 @@ function renderFailSection(){
   const rate=total>0?Math.round(fails.length/total*100):0;
   const types=new Set(fails.map(d=>d.message)).size;
   const last=fails.length>0?fails[0]:null;
-
   document.getElementById('f-total').textContent=fails.length;
   document.getElementById('f-totalSub').textContent=`전체 ${total}건 중`;
   document.getElementById('f-rate').textContent=rate+'%';
@@ -815,7 +791,6 @@ function renderFailSection(){
   document.getElementById('f-types').textContent=types;
   document.getElementById('f-last').textContent=last?last.timestamp:'-';
   document.getElementById('f-lastMsg').textContent=last?last.message:'실패 없음';
-
   const counts={};
   fails.forEach(d=>{counts[d.message]=(counts[d.message]||0)+1;});
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
@@ -823,9 +798,7 @@ function renderFailSection(){
   document.getElementById('msgTypeBar').innerHTML=sorted.length===0
     ?'<div style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</div>'
     :sorted.map(([msg,cnt])=>`<div class="msg-row"><div class="msg-label" title="${msg}">${msg}</div><div class="msg-bar-bg"><div class="msg-bar-fill" style="width:${Math.round(cnt/max*100)}%"></div></div><div class="msg-count">${cnt}건</div></div>`).join('');
-
   renderFailRateTable(currentFailTab);
-
   document.getElementById('failAlert').innerHTML=fails.length>0?`<div class="fail-alert">⚠️ 조회 기간 내 접속 실패 ${fails.length}건</div>`:'';
   document.getElementById('failBody').innerHTML=fails.length===0
     ?'<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa">실패 기록이 없습니다. ✅</td></tr>'
@@ -860,6 +833,7 @@ function renderFailRateTable(type){
     </tr>`;
   }).join('');
 }
+
 function openHmPopup(day, hour, targetId){
   const dowMap={'월':1,'화':2,'수':3,'목':4,'금':5};
   const dow=dowMap[day];
@@ -868,41 +842,34 @@ function openHmPopup(day, hour, targetId){
     const dt=new Date(d.timestamp);
     return dt.getDay()===dow && d.timestamp.slice(11,13)===hour;
   }).sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
-
   if(records.length===0) return;
-
   document.getElementById('hmPopupTitle').textContent=`${day}요일 ${hour}시대 접속 기록 (${records.length}건)`;
   document.getElementById('hmPopupBody').innerHTML=`
     <table class="popup-tbl">
-      <thead>
-        <tr>
-          <th class="sticky-col">일시</th>
-          <th>상태</th>
-          <th>구분</th>
-          <th>메시지</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${records.map(d=>{
-          const ok=d.status==='success';
-          const m=(d.mode||'자동')==='수동';
-          return `<tr class="${ok?'':'fail-row'}">
-            <td class="sticky-col" style="color:#666">${d.timestamp}</td>
-            <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
-            <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
-            <td style="max-width:300px">${d.message}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
+      <thead><tr>
+        <th class="sticky-col">일시</th>
+        <th>상태</th><th>구분</th><th>메시지</th>
+      </tr></thead>
+      <tbody>${records.map(d=>{
+        const ok=d.status==='success';
+        const m=(d.mode||'자동')==='수동';
+        return `<tr class="${ok?'':'fail-row'}">
+          <td class="sticky-col" style="color:#666">${d.timestamp}</td>
+          <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
+          <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
+          <td style="max-width:300px">${d.message}</td>
+        </tr>`;
+      }).join('')}</tbody>
     </table>`;
-
   document.getElementById('hmPopup').classList.add('show');
 }
+
 function closeHmPopup(e){
   if(e.target===document.getElementById('hmPopup')){
     document.getElementById('hmPopup').classList.remove('show');
   }
 }
+
 load();
 setInterval(load,60000);
 </script>
