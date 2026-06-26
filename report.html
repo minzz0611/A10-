@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A10 접속 확인 보고서</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:13px}
+body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:16px}
 .wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
 .header{background:#1a1a2e;color:#fff;border-radius:12px;padding:20px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
 .header-left h1{font-size:18px;font-weight:600;margin-bottom:4px}
@@ -18,7 +19,7 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)}
 .btn-outline:hover{background:rgba(255,255,255,0.1)}
 .tab-nav{display:flex;gap:2px;background:#fff;border-radius:10px;padding:6px;margin-bottom:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.tab-nav-btn{flex:1;border:none;background:transparent;border-radius:7px;padding:11px;font-size:14px;cursor:pointer;color:#888;font-family:inherit;font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab-nav-btn{flex:1;border:none;background:transparent;border-radius:7px;padding:11px;font-size:16px;cursor:pointer;color:#888;font-family:inherit;font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
 .tab-nav-btn.on{background:#4f6ef7;color:#fff;box-shadow:0 2px 8px rgba(79,110,247,0.3)}
 .tab-content{display:none}
 .tab-content.on{display:block}
@@ -69,16 +70,16 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 .stat.red{border-top-color:#ef4444}
 .stat.purple{border-top-color:#a855f7}
 .stat.amber{border-top-color:#f59e0b}
-.stat-label{font-size:11px;color:#888;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.stat-label{font-size:12px;color:#888;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .stat-num{font-size:26px;font-weight:700;line-height:1}
 .stat-num.blue{color:#4f6ef7}
 .stat-num.green{color:#22c55e}
 .stat-num.red{color:#ef4444}
 .stat-num.purple{color:#a855f7}
 .stat-num.amber{color:#f59e0b}
-.stat-sub{font-size:11px;color:#aaa;margin-top:5px}
+.stat-sub{font-size:12px;color:#aaa;margin-top:5px}
 .section{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px}
-.sec-title{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.sec-title{font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
 .sec-title-l{display:flex;align-items:center;gap:6px}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .dot.blue{background:#4f6ef7}.dot.green{background:#22c55e}.dot.red{background:#ef4444}.dot.amber{background:#f59e0b}.dot.purple{background:#a855f7}
@@ -89,24 +90,24 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 .itab{border:none;background:transparent;border-radius:5px;padding:4px 12px;font-size:12px;cursor:pointer;color:#666;font-family:inherit;transition:all .15s}
 .itab.on{background:#fff;color:#4f6ef7;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .tbl-wrap{overflow-x:auto;max-height:380px;overflow-y:auto}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl thead th{background:#f8f9fc;padding:9px 14px;text-align:left;color:#888;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:1}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl thead th{background:#f8f9fc;padding:9px 14px;text-align:left;color:#888;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:1}
 .tbl tbody td{padding:9px 14px;border-bottom:1px solid #f8f8f8;color:#444}
 .tbl tbody tr:hover td{background:#fafbff}
 .tbl tbody tr.fail-row td{background:#fff8f8}
-.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.badge{font-size:12px;padding:3px 9px;border-radius:20px;font-weight:500}
 .badge.ok{background:#dcfce7;color:#16a34a}
 .badge.fail{background:#fee2e2;color:#dc2626}
-.mode-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.mode-badge{font-size:12px;padding:2px 8px;border-radius:20px;font-weight:500}
 .mode-auto{background:#eff6ff;color:#3b82f6}
 .mode-manual{background:#fff7ed;color:#ea580c}
-.rate-table{width:100%;border-collapse:collapse;font-size:12px}
+.rate-table{width:100%;border-collapse:collapse;font-size:14px}
 .rate-table th{background:#f8f9fc;padding:8px 12px;text-align:left;color:#888;font-size:11px;font-weight:600;border-bottom:1px solid #f0f0f0}
 .rate-table td{padding:8px 12px;border-bottom:1px solid #f8f8f8}
 .rate-table tr.fail-row td{background:#fff8f8}
 .rbar{height:6px;background:#f0f0f0;border-radius:3px;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
 .rbar-fill{height:100%;border-radius:3px}
-.hm-cell{border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.hm-cell{border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
 .fail-alert{background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:#dc2626;font-weight:500}
 .msg-type-bar{display:flex;flex-direction:column;gap:8px}
 .msg-row{display:flex;align-items:center;gap:10px;font-size:12px}
@@ -218,41 +219,44 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
 <!-- ===== 탭1: 금일 현황 ===== -->
 <div class="tab-content on" id="tab-today" style="margin-top:16px">
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch">
 
     <!-- 좌측 -->
     <div>
       <!-- 금일 접속 현황 카드 -->
       <div style="background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:14px">금일 접속 현황</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
-              <span style="width:6px;height:6px;border-radius:50%;background:#4f6ef7;display:inline-block"></span>
-              <span style="min-width:120px">전체 접속 시도</span>
+          <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:16px;display:flex;align-items:center;gap:6px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#000000;display:inline-block"></span>
+            금일 접속 현황
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;padding-left:14px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
+              <span style="width:7px;height:7px;border-radius:50%;background:#4f6ef7;display:inline-block;flex-shrink:0"></span>
+              <span style="min-width:130px">전체 접속 시도</span>
               <strong id="t-total" style="color:#1a1a2e;min-width:40px;text-align:right">-</strong>
-              <span style="color:#aaa;font-size:11px">건</span>
+              <span style="color:#aaa;font-size:13px">건</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
-              <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block"></span>
-              <span style="min-width:120px">금일 성공</span>
+            <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
+              <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;flex-shrink:0"></span>
+              <span style="min-width:130px">금일 성공</span>
               <strong id="t-success" style="color:#22c55e;min-width:40px;text-align:right">-</strong>
-              <span style="color:#aaa;font-size:11px">건</span>
+              <span style="color:#aaa;font-size:13px">건</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
-              <span style="width:6px;height:6px;border-radius:50%;background:#ef4444;display:inline-block"></span>
-              <span style="min-width:120px">금일 실패</span>
+            <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#555">
+              <span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;flex-shrink:0"></span>
+              <span style="min-width:130px">금일 실패</span>
               <strong id="t-fail" style="color:#ef4444;min-width:40px;text-align:right">-</strong>
-              <span style="color:#aaa;font-size:11px">건</span>
+              <span style="color:#aaa;font-size:13px">건</span>
             </div>
           </div>
-          <div style="margin-top:12px;font-size:11px;color:#aaa" id="t-date">-</div>
+          <div style="margin-top:14px;font-size:13px;color:#aaa" id="t-date">-</div>
         </div>
-        <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+        <div style="position:relative;width:140px;height:140px;flex-shrink:0">
           <canvas id="todayDonut"></canvas>
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
-            <div id="t-rateNum" style="font-size:22px;font-weight:700;color:#1a1a2e">-</div>
-            <div style="font-size:10px;color:#aaa;margin-top:2px">성공률</div>
+            <div id="t-rateNum" style="font-size:24px;font-weight:700;color:#1a1a2e">-</div>
+            <div style="font-size:12px;color:#aaa;margin-top:2px">성공률</div>
           </div>
         </div>
       </div>
@@ -271,12 +275,12 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
     </div>
 
     <!-- 우측 -->
-    <div>
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
       <!-- 오늘 실패 목록 -->
-      <div class="section">
+      <div class="section" style="margin-bottom:0;flex:1;display:flex;flex-direction:column;min-height:0">
         <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>오늘 실패 목록</span></div>
         <div id="todayFailAlert"></div>
-        <div class="tbl-wrap">
+        <div style="overflow-y:auto;flex:1">
           <table class="tbl">
             <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
             <tbody id="todayFailBody"></tbody>
@@ -285,9 +289,9 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
       </div>
 
       <!-- 오늘 전체 접속 기록 -->
-      <div class="section">
+      <div class="section" style="margin-bottom:0;flex:1;display:flex;flex-direction:column;min-height:0">
         <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span></div>
-        <div class="tbl-wrap">
+        <div style="overflow-y:auto;flex:1">
           <table class="tbl">
             <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
             <tbody id="todayAllBody"></tbody>
