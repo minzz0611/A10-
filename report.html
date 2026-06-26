@@ -10,9 +10,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:16px}
 .wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
-.header{background:#1a1a2e;color:#fff;border-radius:12px;padding:28px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.header-left h1{font-size:20px;font-weight:700;margin-bottom:4px}
-.header-left p{font-size:13px;color:#8b8fa8}
+.header{background:#1a1a2e;color:#fff;border-radius:12px;padding:45px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.header-left h1{font-size:28px;font-weight:700;margin-bottom:0px}
 .header-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
 .btn{border:none;border-radius:6px;padding:7px 16px;font-size:14px;cursor:pointer;font-family:inherit}
 .btn-white{background:#fff;color:#1a1a2e;font-weight:500}
@@ -144,11 +143,10 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 <div class="header">
   <div class="header-left">
     <h1>A10 이용가이드 접속 확인 보고서</h1>
-    <p id="reportMeta">-</p>
   </div>
   <div class="header-right">
     <button class="btn btn-outline" onclick="load()">↻ 새로고침</button>
-    <p style="font-size:13px;color:#8b8fa8;text-align:right">🕐 마지막 접속 확인: <strong id="lastCheckTime" style="color:#fff">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong></p>
+    <p style="font-size:13px;color:#8b8fa8">🕐 마지막 접속 확인: <strong id="lastCheckTime" style="color:#fff">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong></p>
   </div>
 </div>
 
@@ -270,7 +268,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 
     <!-- 우측 -->
     <div>
-      <div class="section" style="margin-bottom:0;height:100%;display:flex;flex-direction:column">
+      <div class="section" style="margin-bottom:0;display:flex;flex-direction:column">
         <div class="sec-title">
           <span class="sec-title-l"><span class="dot blue"></span>금일 접속 기록</span>
           <div style="display:flex;gap:4px">
@@ -279,11 +277,11 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
             <button class="fbtn" data-group="todayStatus" data-val="fail" onclick="toggleTodayFilter(this)">실패</button>
           </div>
         </div>
-        <div style="overflow-y:auto;flex:1">
-          <table class="tbl">
-            <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
-            <tbody id="todayAllBody"></tbody>
-          </table>
+        <div style="overflow-y:auto;max-height:547px">
+                <table class="tbl">
+                  <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
+                 <tbody id="todayAllBody"></tbody>
+              </table>
         </div>
       </div>
     </div>
@@ -532,7 +530,6 @@ async function load(){
     document.getElementById('endDate').value=e;
     calStart=new Date(s); calEnd=new Date(e);
     filtered=allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=s&&dt<=e;});
-    document.getElementById('reportMeta').textContent=`작성일: ${new Date().toLocaleDateString('ko-KR')}`;
     renderAll();
   } catch(e){
     document.getElementById('detailBody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:24px;color:#aaa">데이터를 불러올 수 없습니다.</td></tr>';
