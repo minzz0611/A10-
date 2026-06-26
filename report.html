@@ -149,10 +149,10 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
   <div class="header-left">
     <h1>A10 이용가이드 접속 확인 보고서</h1>
     <p id="reportMeta">-</p>
-  </div>
-  <div class="header-right">
+    </div>
+  <div class="header-right" style="flex-direction:column;align-items:flex-end;gap:10px">
     <button class="btn btn-outline" onclick="load()">↻ 새로고침</button>
-    <button class="btn btn-white" onclick="window.print()">🖨 인쇄 / PDF</button>
+    <p style="font-size:12px;color:#8b8fa8;text-align:right">🕐 마지막 접속 확인: <strong id="lastCheckTime" style="color:#fff">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong></p>
   </div>
 </div>
 
@@ -214,54 +214,95 @@ body{font-family:'Malgun Gothic',sans-serif;background:#f0f2f5;color:#1a1a2e;fon
   </div>
 </div>
 
+
 <!-- ===== 탭1: 금일 현황 ===== -->
 <div class="tab-content on" id="tab-today" style="margin-top:16px">
 
-  <div id="todayBanner" class="status-banner ok">
-    <span id="todayIcon">✅</span>
-    <span id="todayText">데이터 로딩 중...</span>
-  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
 
-  <div class="last-check">
-    🕐 마지막 접속 확인: <strong id="lastCheckTime">-</strong>&nbsp;&nbsp;|&nbsp;&nbsp;결과: <strong id="lastCheckResult">-</strong>
-  </div>
+    <!-- 좌측 -->
+    <div>
+      <!-- 금일 접속 현황 카드 -->
+      <div style="background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:14px">금일 접속 현황</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
+              <span style="width:6px;height:6px;border-radius:50%;background:#4f6ef7;display:inline-block"></span>
+              <span style="min-width:120px">전체 접속 시도</span>
+              <strong id="t-total" style="color:#1a1a2e;min-width:40px;text-align:right">-</strong>
+              <span style="color:#aaa;font-size:11px">건</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
+              <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+              <span style="min-width:120px">금일 성공</span>
+              <strong id="t-success" style="color:#22c55e;min-width:40px;text-align:right">-</strong>
+              <span style="color:#aaa;font-size:11px">건</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555">
+              <span style="width:6px;height:6px;border-radius:50%;background:#ef4444;display:inline-block"></span>
+              <span style="min-width:120px">금일 실패</span>
+              <strong id="t-fail" style="color:#ef4444;min-width:40px;text-align:right">-</strong>
+              <span style="color:#aaa;font-size:11px">건</span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:#aaa" id="t-date">-</div>
+        </div>
+        <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+          <canvas id="todayDonut"></canvas>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div id="t-rateNum" style="font-size:22px;font-weight:700;color:#1a1a2e">-</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px">성공률</div>
+          </div>
+        </div>
+      </div>
 
-  <div class="stats col3">
-    <div class="stat blue"><div class="stat-label">오늘 접속 시도</div><div class="stat-num blue" id="t-total">-</div><div class="stat-sub" id="t-date">-</div></div>
-    <div class="stat green"><div class="stat-label">오늘 성공</div><div class="stat-num green" id="t-success">-</div><div class="stat-sub" id="t-successRate">-</div></div>
-    <div class="stat red"><div class="stat-label">오늘 실패</div><div class="stat-num red" id="t-fail">-</div><div class="stat-sub" id="t-failRate">-</div></div>
-  </div>
+      <!-- 시간대별 접속 현황 -->
+      <div class="section">
+        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
+        <div id="todayTimelineWrap" style="overflow-x:auto"></div>
+      </div>
 
-  <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 시간대별 접속 현황 (9시 ~ 18시)</span></div>
-    <div id="todayTimelineWrap" style="overflow-x:auto"></div>
-  </div>
-
-  <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 히트맵</span></div>
-    <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
-  </div>
-
-  <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>오늘 실패 목록</span></div>
-    <div id="todayFailAlert"></div>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
-        <tbody id="todayFailBody"></tbody>
-      </table>
+      <!-- 금주 히트맵 -->
+      <div class="section">
+        <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 히트맵</span></div>
+        <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
+      </div>
     </div>
+
+    <!-- 우측 -->
+    <div>
+      <!-- 오늘 실패 목록 -->
+      <div class="section">
+        <div class="sec-title"><span class="sec-title-l"><span class="dot red"></span>오늘 실패 목록</span></div>
+        <div id="todayFailAlert"></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>일시</th><th>구분</th><th>실패 메시지</th></tr></thead>
+            <tbody id="todayFailBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 오늘 전체 접속 기록 -->
+      <div class="section">
+        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
+            <tbody id="todayAllBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>오늘 전체 접속 기록</span></div>
-    <div class="tbl-wrap">
-      <table class="tbl">
-        <thead><tr><th>일시</th><th>상태</th><th>구분</th><th>메시지</th></tr></thead>
-        <tbody id="todayAllBody"></tbody>
-      </table>
-    </div>
-  </div>
+</div>
+
+
+
+
 
 </div>
 
@@ -532,19 +573,6 @@ function renderTodayTab(){
   const fail=todayData.length-succ;
   const rate=todayData.length>0?Math.round(succ/todayData.length*100):null;
 
-  const banner=document.getElementById('todayBanner');
-  const icon=document.getElementById('todayIcon');
-  const text=document.getElementById('todayText');
-  if(todayData.length===0){
-    banner.className='status-banner warn';icon.textContent='⏳';text.textContent='오늘 접속 기록이 아직 없습니다.';
-  } else if(rate>=90){
-    banner.className='status-banner ok';icon.textContent='✅';text.textContent=`오늘 정상 운영 중입니다. (성공률 ${rate}%, 실패 ${fail}건)`;
-  } else if(rate>=70){
-    banner.className='status-banner warn';icon.textContent='⚠️';text.textContent=`오늘 주의가 필요합니다. (성공률 ${rate}%, 실패 ${fail}건)`;
-  } else {
-    banner.className='status-banner danger';icon.textContent='🚨';text.textContent=`오늘 점검이 필요합니다! (성공률 ${rate}%, 실패 ${fail}건)`;
-  }
-
   const last=allData[0];
   if(last){
     document.getElementById('lastCheckTime').textContent=last.timestamp;
@@ -556,8 +584,27 @@ function renderTodayTab(){
   document.getElementById('t-success').textContent=succ;
   document.getElementById('t-fail').textContent=fail;
   document.getElementById('t-date').textContent=ts;
-  document.getElementById('t-successRate').textContent=todayData.length>0?`성공률 ${rate}%`:'';
-  document.getElementById('t-failRate').textContent=todayData.length>0?`실패율 ${100-rate}%`:'';
+  document.getElementById('t-rateNum').textContent=rate!==null?rate+'%':'-';
+
+  // 도넛 차트
+  if(window._todayDonutInst) window._todayDonutInst.destroy();
+  window._todayDonutInst=new Chart(document.getElementById('todayDonut'),{
+    type:'doughnut',
+    data:{
+      labels:['성공','실패'],
+      datasets:[{
+        data:[succ, fail>0?fail:0],
+        backgroundColor:['#4f6ef7','#fee2e2'],
+        borderWidth:0,
+        hoverOffset:4
+      }]
+    },
+    options:{
+      responsive:true,
+      cutout:'72%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}건`}}}
+    }
+  });
 
   // 타임라인
   const hours=Array.from({length:10},(_,i)=>String(i+9).padStart(2,'0'));
