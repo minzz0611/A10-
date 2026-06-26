@@ -134,13 +134,14 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .popup-tbl tbody tr.fail-row td.sticky-col{background:#fff8f8}
 .popup-tbl tbody tr:hover td{background:#fafbff}
 .popup-tbl tbody tr:hover td.sticky-col{background:#fafbff}
-.tbl col.col-time{width:150px}
-.tbl col.col-status{width:100px}
-.tbl col.col-mode{width:100px}
-.tbl col.col-msg{width:auto}
-.tbl col.col-time2{width:160px}
-.tbl col.col-mode2{width:70px}
-.tbl col.col-msg2{width:auto}
+.tbl col.col-time{width:140px}
+.tbl col.col-status{width:65px}
+.tbl col.col-mode{width:65px}
+.tbl col.col-msg{width:200px}
+.tbl col.col-time2{width:150px}
+.tbl col.col-mode2{width:60px}
+.tbl col.col-msg2{width:200px}
+.tbl td{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0}
 @media print{.tab-nav,.header-right,.no-print{display:none!important}.tab-content{display:block!important}body{background:#fff}}
 </style>
 </head>
@@ -643,7 +644,8 @@ function renderTodayAllBody(){
     :data.map(d=>{
       const ok=d.status==='success';
       const m=(d.mode||'자동')==='수동';
-      return `<tr class="${ok?'':'fail-row'}">
+      const clickable=!ok?`style="cursor:pointer" onclick="goToFailLog('${d.timestamp}')" title="실패 목록에서 보기"`:'' ;
+      return `<tr class="${ok?'':'fail-row'}" ${clickable}>
         <td style="color:#666">${d.timestamp}</td>
         <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
         <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
@@ -876,7 +878,31 @@ function closeHmPopup(e){
     document.getElementById('hmPopup').classList.remove('show');
   }
 }
+function goToFailLog(timestamp){
+  // 전체현황 탭으로 이동
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-all').classList.add('on');
+  document.querySelectorAll('.tab-nav-btn')[1].classList.add('on');
+  document.getElementById('searchBox').style.display='block';
 
+  // 실패 목록 섹션으로 스크롤
+  setTimeout(()=>{
+    const failSection=document.getElementById('failBody').closest('.section');
+    failSection.scrollIntoView({behavior:'smooth', block:'start'});
+
+    // 해당 행 강조
+    const rows=document.querySelectorAll('#failBody tr');
+    rows.forEach(row=>{
+      const td=row.querySelector('td');
+      if(td&&td.textContent.trim()===timestamp){
+        row.style.outline='2px solid #4f6ef7';
+        row.style.outlineOffset='2px';
+        setTimeout(()=>{row.style.outline='';row.style.outlineOffset='';},3000);
+      }
+    });
+  }, 300);
+}
 load();
 setInterval(load,60000);
 </script>
