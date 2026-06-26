@@ -364,5 +364,11 @@
     "status": "success",
     "message": "로그인 성공",
     "mode": "수동"
+  },
+  {
+    "timestamp": "2026-06-26 16:34",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "수동"
   }
 ]
