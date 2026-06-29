@@ -99,8 +99,8 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .rate-table th{background:#f8f9fc;padding:8px 12px;text-align:left;color:#888;font-size:12px;font-weight:600;border-bottom:1px solid #f0f0f0}
 .rate-table td{padding:8px 12px;border-bottom:1px solid #f8f8f8}
 .rate-table tr.fail-row td{background:#fff8f8}
-.rbar{height:6px;background:#f0f0f0;border-radius:3px;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
-.rbar-fill{height:100%;border-radius:3px}
+.rbar{height:6px;background:#f0f0f0;border-radius:3px;width:80px;display:inline-flex;align-items:center;vertical-align:middle;margin-left:6px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:3px;flex-shrink:0}
 .hm-cell{border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
 .fail-alert{background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#dc2626;font-weight:500}
 .msg-type-bar{display:flex;flex-direction:column;gap:8px}
@@ -800,11 +800,30 @@ function renderDateHeatmap(targetId, data){
   html+='<div></div>';
   hours.forEach(h=>{html+=`<div style="text-align:center;font-size:12px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
 
+  function getMondayStr(dateStr){
+    const dt=new Date(dateStr);
+    const day=dt.getDay();
+    const diff=day===0?-6:1-day;
+    const mon=new Date(dt);
+    mon.setDate(dt.getDate()+diff);
+    return mon.toISOString().slice(0,10);
+  }
+
+  const totalCols=hours.length+1;
+  let prevMonday=null;
+
   dates.forEach(date=>{
     const dt=new Date(date);
     const dow=dowNames[dt.getDay()];
     const label=date.slice(5)+'('+dow+')';
     const isWeekend=dt.getDay()===0||dt.getDay()===6;
+    const monday=getMondayStr(date);
+
+    if(prevMonday!==null && monday!==prevMonday){
+      html+=`<div style="grid-column:1 / span ${totalCols};height:1px;background:#e0e0e0;margin:3px 0"></div>`;
+    }
+    prevMonday=monday;
+
     html+=`<div style="display:flex;align-items:center;font-size:11px;color:${isWeekend?'#ef4444':'#666'};font-weight:600;padding-right:6px;white-space:nowrap">${label}</div>`;
     hours.forEach(h=>{
       const c=grid[date+h];
