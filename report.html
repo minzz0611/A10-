@@ -183,26 +183,50 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 </div>
 
 <div class="cal-overlay" id="calOverlay">
-  <div class="cal-popup">
-    <div class="cal-quick">
+  <div class="cal-popup" style="min-width:600px">
+    <div class="cal-quick" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0">
       <button class="qbtn" onclick="setQuickCal('today')">금일</button>
       <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
       <button class="qbtn" onclick="setQuickCal('week')">주간</button>
       <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
       <button class="qbtn" onclick="setQuickCal('month')">당월</button>
       <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
+      <button class="qbtn" onclick="setQuickCal('thisyear')">올해</button>
+      <button class="qbtn" onclick="setQuickCal('lastyear')">전년도</button>
+      <button class="qbtn" onclick="setQuickCal('h1')">상반기</button>
+      <button class="qbtn" onclick="setQuickCal('h2')">하반기</button>
+      <button class="qbtn" onclick="setQuickCal('q1')">1분기</button>
+      <button class="qbtn" onclick="setQuickCal('q2')">2분기</button>
+      <button class="qbtn" onclick="setQuickCal('q3')">3분기</button>
+      <button class="qbtn" onclick="setQuickCal('q4')">4분기</button>
+      <button class="qbtn" onclick="setQuickCal('m1')">1월</button>
+      <button class="qbtn" onclick="setQuickCal('m2')">2월</button>
+      <button class="qbtn" onclick="setQuickCal('m3')">3월</button>
+      <button class="qbtn" onclick="setQuickCal('m4')">4월</button>
+      <button class="qbtn" onclick="setQuickCal('m5')">5월</button>
+      <button class="qbtn" onclick="setQuickCal('m6')">6월</button>
+      <button class="qbtn" onclick="setQuickCal('m7')">7월</button>
+      <button class="qbtn" onclick="setQuickCal('m8')">8월</button>
+      <button class="qbtn" onclick="setQuickCal('m9')">9월</button>
+      <button class="qbtn" onclick="setQuickCal('m10')">10월</button>
+      <button class="qbtn" onclick="setQuickCal('m11')">11월</button>
+      <button class="qbtn" onclick="setQuickCal('m12')">12월</button>
     </div>
     <div class="cal-months">
       <div>
         <div class="cal-month-title">
-          <span class="cal-nav" onclick="moveCal(-1)">&#8249;</span>
+          <span class="cal-nav" onclick="moveCal1(-1)">&#8249;</span>
           <span id="calTitle1"></span>
-          <span class="cal-nav" onclick="moveCal(1)">&#8250;</span>
+          <span class="cal-nav" onclick="moveCal1(1)">&#8250;</span>
         </div>
         <div class="cal-grid" id="calGrid1"></div>
       </div>
       <div>
-        <div class="cal-month-title"><span id="calTitle2"></span></div>
+        <div class="cal-month-title">
+          <span class="cal-nav" onclick="moveCal2(-1)">&#8249;</span>
+          <span id="calTitle2"></span>
+          <span class="cal-nav" onclick="moveCal2(1)">&#8250;</span>
+        </div>
         <div class="cal-grid" id="calGrid2"></div>
       </div>
     </div>
@@ -439,21 +463,39 @@ function switchTab(id, el){
 }
 
 function setQuick(type){
-  const t=today(); let s,e;
+  const t=today(); const y=t.getFullYear(); let s,e;
   if(type==='today'){s=e=fmt(t);}
-  else if(type==='yesterday'){const y=new Date(t);y.setDate(y.getDate()-1);s=e=fmt(y);}
+  else if(type==='yesterday'){const yd=new Date(t);yd.setDate(t.getDate()-1);s=e=fmt(yd);}
   else if(type==='week'){const m=new Date(t);m.setDate(t.getDate()-t.getDay()+1);s=fmt(m);e=fmt(t);}
   else if(type==='lastweek'){const lm=new Date(t);lm.setDate(t.getDate()-t.getDay());const ls=new Date(lm);ls.setDate(lm.getDate()-6);s=fmt(ls);e=fmt(lm);}
-  else if(type==='month'){s=fmt(new Date(t.getFullYear(),t.getMonth(),1));e=fmt(t);}
-  else if(type==='lastmonth'){const a=new Date(t.getFullYear(),t.getMonth()-1,1);const b=new Date(t.getFullYear(),t.getMonth(),0);s=fmt(a);e=fmt(b);}
+  else if(type==='month'){s=fmt(new Date(y,t.getMonth(),1));e=fmt(t);}
+  else if(type==='lastmonth'){s=fmt(new Date(y,t.getMonth()-1,1));e=fmt(new Date(y,t.getMonth(),0));}
+  else if(type==='thisyear'){s=`${y}-01-01`;e=fmt(t);}
+  else if(type==='lastyear'){s=`${y-1}-01-01`;e=`${y-1}-12-31`;}
+  else if(type==='h1'){s=`${y}-01-01`;e=`${y}-06-30`;}
+  else if(type==='h2'){s=`${y}-07-01`;e=`${y}-12-31`;}
+  else if(type==='q1'){s=`${y}-01-01`;e=`${y}-03-31`;}
+  else if(type==='q2'){s=`${y}-04-01`;e=`${y}-06-30`;}
+  else if(type==='q3'){s=`${y}-07-01`;e=`${y}-09-30`;}
+  else if(type==='q4'){s=`${y}-10-01`;e=`${y}-12-31`;}
+  else if(type.startsWith('m')){
+    const mo=parseInt(type.slice(1));
+    s=fmt(new Date(y,mo-1,1));
+    e=fmt(new Date(y,mo,0));
+  }
   document.getElementById('startDate').value=s;
   document.getElementById('endDate').value=e;
   calStart=new Date(s); calEnd=new Date(e);
   applyFilter();
 }
 
+let cal1Year, cal1Month, cal2Year, cal2Month;
+
 function openCal(){
-  const t=today(); calBaseYear=t.getFullYear(); calBaseMonth=t.getMonth()-1;
+  const t=today();
+  cal1Year=t.getFullYear(); cal1Month=t.getMonth()-1;
+  if(cal1Month<0){cal1Month=11;cal1Year--;}
+  cal2Year=t.getFullYear(); cal2Month=t.getMonth();
   renderCal(); document.getElementById('calOverlay').classList.add('show');
 }
 function closeCal(){document.getElementById('calOverlay').classList.remove('show');}
@@ -464,19 +506,25 @@ function confirmCal(){
   }
   closeCal(); applyFilter();
 }
-function moveCal(d){
-  calBaseMonth+=d;
-  if(calBaseMonth<0){calBaseMonth=11;calBaseYear--;}
-  else if(calBaseMonth>11){calBaseMonth=0;calBaseYear++;}
-  renderCal();
+function moveCal1(d){
+  cal1Month+=d;
+  if(cal1Month<0){cal1Month=11;cal1Year--;}
+  else if(cal1Month>11){cal1Month=0;cal1Year++;}
+  renderMonth('calGrid1','calTitle1',cal1Year,cal1Month);
+  updateSelRange();
+}
+function moveCal2(d){
+  cal2Month+=d;
+  if(cal2Month<0){cal2Month=11;cal2Year--;}
+  else if(cal2Month>11){cal2Month=0;cal2Year++;}
+  renderMonth('calGrid2','calTitle2',cal2Year,cal2Month);
+  updateSelRange();
 }
 function setQuickCal(type){setQuick(type);closeCal();}
 
 function renderCal(){
-  renderMonth('calGrid1','calTitle1',calBaseYear,calBaseMonth);
-  let ny=calBaseYear,nm=calBaseMonth+1;
-  if(nm>11){nm=0;ny++;}
-  renderMonth('calGrid2','calTitle2',ny,nm);
+  renderMonth('calGrid1','calTitle1',cal1Year,cal1Month);
+  renderMonth('calGrid2','calTitle2',cal2Year,cal2Month);
   updateSelRange();
 }
 
@@ -744,32 +792,11 @@ function renderDateHeatmap(targetId, data){
   html+='<div></div>';
   hours.forEach(h=>{html+=`<div style="text-align:center;font-size:12px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
 
-  // 주차 시작일 계산 (월요일 기준)
-  function getMondayStr(dateStr){
-    const dt=new Date(dateStr);
-    const day=dt.getDay();
-    const diff=day===0?-6:1-day;
-    const mon=new Date(dt);
-    mon.setDate(dt.getDate()+diff);
-    return mon.toISOString().slice(0,10);
-  }
-
-  let prevMonday=null;
-  const totalCols=hours.length+1;
-
   dates.forEach(date=>{
     const dt=new Date(date);
     const dow=dowNames[dt.getDay()];
     const label=date.slice(5)+'('+dow+')';
     const isWeekend=dt.getDay()===0||dt.getDay()===6;
-    const monday=getMondayStr(date);
-
-    // 주 구분선: 이전 주차와 다를 때 (첫 번째 제외)
-    if(prevMonday!==null && monday!==prevMonday){
-      html+=`<div style="grid-column:1 / span ${totalCols};height:1px;background:#e0e0e0;margin:4px 0"></div>`;
-    }
-    prevMonday=monday;
-
     html+=`<div style="display:flex;align-items:center;font-size:11px;color:${isWeekend?'#ef4444':'#666'};font-weight:600;padding-right:6px;white-space:nowrap">${label}</div>`;
     hours.forEach(h=>{
       const c=grid[date+h];
