@@ -824,7 +824,7 @@ function renderDateHeatmap(targetId, data){
     }
     prevMonday=monday;
 
-    html+=`<div style="display:flex;align-items:center;font-size:11px;color:${isWeekend?'#ef4444':'#666'};font-weight:600;padding-right:6px;white-space:nowrap">${label}</div>`;
+    html+=`<div style="display:flex;align-items:center;font-size:12px;color:${isWeekend?'#ef4444':'#666'};font-weight:600;padding-right:6px;white-space:nowrap">${label}</div>`;
     hours.forEach(h=>{
       const c=grid[date+h];
       const r=c.t>0?Math.round(c.s/c.t*100):null;
