@@ -744,11 +744,32 @@ function renderDateHeatmap(targetId, data){
   html+='<div></div>';
   hours.forEach(h=>{html+=`<div style="text-align:center;font-size:12px;color:#aaa;font-weight:500;padding:2px 0">${h}시</div>`;});
 
+  // 주차 시작일 계산 (월요일 기준)
+  function getMondayStr(dateStr){
+    const dt=new Date(dateStr);
+    const day=dt.getDay();
+    const diff=day===0?-6:1-day;
+    const mon=new Date(dt);
+    mon.setDate(dt.getDate()+diff);
+    return mon.toISOString().slice(0,10);
+  }
+
+  let prevMonday=null;
+  const totalCols=hours.length+1;
+
   dates.forEach(date=>{
     const dt=new Date(date);
     const dow=dowNames[dt.getDay()];
     const label=date.slice(5)+'('+dow+')';
     const isWeekend=dt.getDay()===0||dt.getDay()===6;
+    const monday=getMondayStr(date);
+
+    // 주 구분선: 이전 주차와 다를 때 (첫 번째 제외)
+    if(prevMonday!==null && monday!==prevMonday){
+      html+=`<div style="grid-column:1 / span ${totalCols};height:1px;background:#e0e0e0;margin:4px 0"></div>`;
+    }
+    prevMonday=monday;
+
     html+=`<div style="display:flex;align-items:center;font-size:11px;color:${isWeekend?'#ef4444':'#666'};font-weight:600;padding-right:6px;white-space:nowrap">${label}</div>`;
     hours.forEach(h=>{
       const c=grid[date+h];
