@@ -150,7 +150,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 
 <div class="header">
   <div class="header-left">
-    <h1>A10 이용가이드 접속 확인 보고서</h1>
+    <h1>A10 이용가이드 접속 확인 결과</h1>
   </div>
   <div class="header-right">
     <button class="btn btn-outline" onclick="load()">↻ 새로고침</button>
@@ -477,8 +477,8 @@ function setQuick(type){
   else if(type==='yesterday'){const yd=new Date(t);yd.setDate(t.getDate()-1);s=e=fmt(yd);}
   else if(type==='week'){const m=new Date(t);m.setDate(t.getDate()-t.getDay()+1);s=fmt(m);e=fmt(t);}
   else if(type==='lastweek'){const lm=new Date(t);lm.setDate(t.getDate()-t.getDay());const ls=new Date(lm);ls.setDate(lm.getDate()-6);s=fmt(ls);e=fmt(lm);}
-  else if(type==='month'){s=fmt(new Date(y,t.getMonth(),1));e=fmt(t);}
-  else if(type==='lastmonth'){s=fmt(new Date(y,t.getMonth()-1,1));e=fmt(new Date(y,t.getMonth(),0));}
+ else if(type==='month'){s=`${y}-${String(t.getMonth()+1).padStart(2,'0')}-01`;e=fmt(new Date(y,t.getMonth()+1,0));}
+  else if(type==='lastmonth'){const lm=t.getMonth()===0?11:t.getMonth()-1;const ly=t.getMonth()===0?y-1:y;s=`${ly}-${String(lm+1).padStart(2,'0')}-01`;e=fmt(new Date(ly,lm+1,0));}
   else if(type==='thisyear'){s=`${y}-01-01`;e=fmt(t);}
   else if(type==='lastyear'){s=`${y-1}-01-01`;e=`${y-1}-12-31`;}
   else if(type==='h1'){s=`${y}-01-01`;e=`${y}-06-30`;}
@@ -608,7 +608,6 @@ function applyFilter(){
   const s=document.getElementById('startDate').value;
   const e=document.getElementById('endDate').value;
   filtered=(!s||!e)?[...allData]:allData.filter(d=>{const dt=d.timestamp.slice(0,10);return dt>=s&&dt<=e;});
-  document.getElementById('reportMeta').textContent=`조회기간: ${s} ~ ${e}  |  작성일: ${new Date().toLocaleDateString('ko-KR')}`;
   renderAll();
 }
 
