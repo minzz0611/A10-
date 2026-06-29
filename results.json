@@ -550,5 +550,11 @@
     "status": "success",
     "message": "로그인 성공",
     "mode": "자동"
+  },
+  {
+    "timestamp": "2026-06-29 13:10",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동"
   }
 ]
