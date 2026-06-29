@@ -27,7 +27,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 .search-label{font-size:14px;color:#666;font-weight:500;min-width:36px}
 .date-input{border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;font-size:14px;width:116px;cursor:pointer;font-family:inherit;background:#fafafa}
 .quick-btns{display:flex;gap:4px;flex-wrap:wrap}
-.qbtn{border:1px solid #e0e0e0;background:#fff;border-radius:5px;padding:4px 10px;font-size:14px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
+.qbtn{border:1px solid #e0e0e0;background:#fff;border-radius:5px;padding:4px 6px;font-size:14px;cursor:pointer;color:#555;font-family:inherit;transition:all .15s}
 .qbtn:hover,.qbtn.on{background:#4f6ef7;color:#fff;border-color:#4f6ef7}
 .search-btn{background:#4f6ef7;color:#fff;border:none;border-radius:6px;padding:7px 20px;font-size:14px;cursor:pointer;font-family:inherit;margin-left:auto}
 .dv{width:1px;height:22px;background:#e0e0e0}
@@ -183,34 +183,43 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 </div>
 
 <div class="cal-overlay" id="calOverlay">
-  <div class="cal-popup" style="min-width:600px">
-    <div class="cal-quick" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0">
-      <button class="qbtn" onclick="setQuickCal('today')">금일</button>
-      <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
-      <button class="qbtn" onclick="setQuickCal('week')">주간</button>
-      <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
-      <button class="qbtn" onclick="setQuickCal('month')">당월</button>
-      <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
-      <button class="qbtn" onclick="setQuickCal('thisyear')">올해</button>
-      <button class="qbtn" onclick="setQuickCal('lastyear')">전년도</button>
-      <button class="qbtn" onclick="setQuickCal('h1')">상반기</button>
-      <button class="qbtn" onclick="setQuickCal('h2')">하반기</button>
-      <button class="qbtn" onclick="setQuickCal('q1')">1분기</button>
-      <button class="qbtn" onclick="setQuickCal('q2')">2분기</button>
-      <button class="qbtn" onclick="setQuickCal('q3')">3분기</button>
-      <button class="qbtn" onclick="setQuickCal('q4')">4분기</button>
-      <button class="qbtn" onclick="setQuickCal('m1')">1월</button>
-      <button class="qbtn" onclick="setQuickCal('m2')">2월</button>
-      <button class="qbtn" onclick="setQuickCal('m3')">3월</button>
-      <button class="qbtn" onclick="setQuickCal('m4')">4월</button>
-      <button class="qbtn" onclick="setQuickCal('m5')">5월</button>
-      <button class="qbtn" onclick="setQuickCal('m6')">6월</button>
-      <button class="qbtn" onclick="setQuickCal('m7')">7월</button>
-      <button class="qbtn" onclick="setQuickCal('m8')">8월</button>
-      <button class="qbtn" onclick="setQuickCal('m9')">9월</button>
-      <button class="qbtn" onclick="setQuickCal('m10')">10월</button>
-      <button class="qbtn" onclick="setQuickCal('m11')">11월</button>
-      <button class="qbtn" onclick="setQuickCal('m12')">12월</button>
+  <div class="cal-popup" style="width:660px;max-width:96vw">
+    <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0">
+      <!-- 1줄: 금일~이전달 -->
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:5px">
+        <button class="qbtn" onclick="setQuickCal('today')">금일</button>
+        <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
+        <button class="qbtn" onclick="setQuickCal('week')">주간</button>
+        <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
+        <button class="qbtn" onclick="setQuickCal('month')">당월</button>
+        <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
+      </div>
+      <!-- 2줄: 올해~4분기 -->
+      <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:5px">
+        <button class="qbtn" onclick="setQuickCal('thisyear')">올해</button>
+        <button class="qbtn" onclick="setQuickCal('lastyear')">전년도</button>
+        <button class="qbtn" onclick="setQuickCal('h1')">상반기</button>
+        <button class="qbtn" onclick="setQuickCal('h2')">하반기</button>
+        <button class="qbtn" onclick="setQuickCal('q1')">1분기</button>
+        <button class="qbtn" onclick="setQuickCal('q2')">2분기</button>
+        <button class="qbtn" onclick="setQuickCal('q3')">3분기</button>
+        <button class="qbtn" onclick="setQuickCal('q4')">4분기</button>
+      </div>
+      <!-- 3줄: 1월~12월 -->
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px">
+        <button class="qbtn" onclick="setQuickCal('m1')">1월</button>
+        <button class="qbtn" onclick="setQuickCal('m2')">2월</button>
+        <button class="qbtn" onclick="setQuickCal('m3')">3월</button>
+        <button class="qbtn" onclick="setQuickCal('m4')">4월</button>
+        <button class="qbtn" onclick="setQuickCal('m5')">5월</button>
+        <button class="qbtn" onclick="setQuickCal('m6')">6월</button>
+        <button class="qbtn" onclick="setQuickCal('m7')">7월</button>
+        <button class="qbtn" onclick="setQuickCal('m8')">8월</button>
+        <button class="qbtn" onclick="setQuickCal('m9')">9월</button>
+        <button class="qbtn" onclick="setQuickCal('m10')">10월</button>
+        <button class="qbtn" onclick="setQuickCal('m11')">11월</button>
+        <button class="qbtn" onclick="setQuickCal('m12')">12월</button>
+      </div>
     </div>
     <div class="cal-months">
       <div>
@@ -293,7 +302,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 
       <!-- 금주 히트맵 -->
       <div class="section" style="margin-bottom:0">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 히트맵</span></div>
+        <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 </span></div>
         <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
       </div>
     </div>
@@ -333,7 +342,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
   </div>
 
   <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 히트맵</span></div>
+    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 </span></div>
     <div id="allHeatmapWrap" style="overflow-x:auto"></div>
   </div>
 
