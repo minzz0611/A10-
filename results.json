@@ -2296,5 +2296,11 @@
     "status": "success",
     "message": "로그인 성공",
     "mode": "자동"
+  },
+  {
+    "timestamp": "2026-07-06 15:20",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동"
   }
 ]
