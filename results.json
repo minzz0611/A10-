@@ -2710,5 +2710,11 @@
     "status": "error",
     "message": "Page.goto: Timeout 15000ms exceeded.\nCall log:\n  - navigating to \"https://support.amaranth10.com/user/am10manage/login\", waiting until \"load\"\n",
     "mode": "자동"
+  },
+  {
+    "timestamp": "2026-07-07 17:40",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동"
   }
 ]
