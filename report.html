@@ -170,14 +170,6 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     <span style="color:#ccc">~</span>
     <input type="text" class="date-input" id="endDate" readonly placeholder="종료일" onclick="openCal()">
     <div class="dv"></div>
-    <div class="quick-btns">
-      <button class="qbtn" onclick="setQuick('today')">금일</button>
-      <button class="qbtn" onclick="setQuick('yesterday')">전일</button>
-      <button class="qbtn" onclick="setQuick('week')">주간</button>
-      <button class="qbtn" onclick="setQuick('lastweek')">전주</button>
-      <button class="qbtn" onclick="setQuick('month')">당월</button>
-      <button class="qbtn" onclick="setQuick('lastmonth')">이전달</button>
-    </div>
     <button class="search-btn" onclick="applyFilter()">조회</button>
   </div>
 </div>
@@ -185,15 +177,6 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 <div class="cal-overlay" id="calOverlay">
   <div class="cal-popup" style="width:660px;max-width:96vw">
     <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0">
-      <!-- 1줄: 금일~이전달 -->
-      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:5px">
-        <button class="qbtn" onclick="setQuickCal('today')">금일</button>
-        <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
-        <button class="qbtn" onclick="setQuickCal('week')">주간</button>
-        <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
-        <button class="qbtn" onclick="setQuickCal('month')">당월</button>
-        <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
-      </div>
       <!-- 2줄: 올해~4분기 -->
       <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:5px">
         <button class="qbtn" onclick="setQuickCal('thisyear')">올해</button>
@@ -296,13 +279,13 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 
       <!-- 시간대별 현황 -->
       <div class="section" style="margin-bottom:0">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>금일 시간대별 접속 현황 (9시 ~ 18시)</span></div>
+        <div class="sec-title"><span class="sec-title-l"><span class="dot blue"></span>금일 시간대별 접속 현황 (9시 ~ 18시)</span><span style="font-size:12px;font-weight:400;color:#aaa">셀을 클릭하면 해당 시간의 접속 내역을 확인할 수 있어요</span></div>
         <div id="todayTimelineWrap" style="overflow-x:auto"></div>
       </div>
 
       <!-- 금주 히트맵 -->
       <div class="section" style="margin-bottom:0">
-        <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 </span></div>
+        <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>금주 시간대별 접속 성공률 </span><span style="font-size:12px;font-weight:400;color:#aaa">셀을 클릭하면 해당 시간의 접속 내역을 확인할 수 있어요</span></div>
         <div id="weekHeatmapWrap" style="overflow-x:auto"></div>
       </div>
     </div>
