@@ -170,6 +170,14 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
     <span style="color:#ccc">~</span>
     <input type="text" class="date-input" id="endDate" readonly placeholder="종료일" onclick="openCal()">
     <div class="dv"></div>
+    <div class="quick-btns">
+      <button class="qbtn" onclick="setQuick('today')">금일</button>
+      <button class="qbtn" onclick="setQuick('yesterday')">전일</button>
+      <button class="qbtn" onclick="setQuick('week')">주간</button>
+      <button class="qbtn" onclick="setQuick('lastweek')">전주</button>
+      <button class="qbtn" onclick="setQuick('month')">당월</button>
+      <button class="qbtn" onclick="setQuick('lastmonth')">이전달</button>
+    </div>
     <button class="search-btn" onclick="applyFilter()">조회</button>
   </div>
 </div>
@@ -177,6 +185,15 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
 <div class="cal-overlay" id="calOverlay">
   <div class="cal-popup" style="width:660px;max-width:96vw">
     <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0">
+      <!-- 1줄: 금일~이전달 -->
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:5px">
+        <button class="qbtn" onclick="setQuickCal('today')">금일</button>
+        <button class="qbtn" onclick="setQuickCal('yesterday')">전일</button>
+        <button class="qbtn" onclick="setQuickCal('week')">주간</button>
+        <button class="qbtn" onclick="setQuickCal('lastweek')">전주</button>
+        <button class="qbtn" onclick="setQuickCal('month')">당월</button>
+        <button class="qbtn" onclick="setQuickCal('lastmonth')">이전달</button>
+      </div>
       <!-- 2줄: 올해~4분기 -->
       <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:5px">
         <button class="qbtn" onclick="setQuickCal('thisyear')">올해</button>
@@ -458,8 +475,8 @@ function setQuick(type){
   const t=today(); const y=t.getFullYear(); let s,e;
   if(type==='today'){s=e=fmt(t);}
   else if(type==='yesterday'){const yd=new Date(t);yd.setDate(t.getDate()-1);s=e=fmt(yd);}
-  else if(type==='week'){const m=new Date(t);m.setDate(t.getDate()-t.getDay()+1);s=fmt(m);e=fmt(t);}
-  else if(type==='lastweek'){const lm=new Date(t);lm.setDate(t.getDate()-t.getDay());const ls=new Date(lm);ls.setDate(lm.getDate()-6);s=fmt(ls);e=fmt(lm);}
+  else if(type==='week'){const day=t.getDay();const diff=day===0?-6:1-day;const m=new Date(t);m.setDate(t.getDate()+diff);s=fmt(m);e=fmt(t);}
+  else if(type==='lastweek'){const day=t.getDay();const diff=day===0?-6:1-day;const thisMon=new Date(t);thisMon.setDate(t.getDate()+diff);const lm=new Date(thisMon);lm.setDate(thisMon.getDate()-7);const ls=new Date(thisMon);ls.setDate(thisMon.getDate()-1);s=fmt(lm);e=fmt(ls);}
  else if(type==='month'){s=`${y}-${String(t.getMonth()+1).padStart(2,'0')}-01`;e=fmt(new Date(y,t.getMonth()+1,0));}
   else if(type==='lastmonth'){const lm=t.getMonth()===0?11:t.getMonth()-1;const ly=t.getMonth()===0?y-1:y;s=`${ly}-${String(lm+1).padStart(2,'0')}-01`;e=fmt(new Date(ly,lm+1,0));}
   else if(type==='thisyear'){s=`${y}-01-01`;e=fmt(t);}
