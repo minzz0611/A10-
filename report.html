@@ -458,7 +458,7 @@ let calBaseYear, calBaseMonth;
 let currentRateTab='day', currentFailTab='day', detailOpen=true;
 let filterStatus='all', filterMode='all';
 
-function fmt(d){return d.toISOString().slice(0,10);}
+function fmt(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function today(){return new Date();}
 function todayStr(){return fmt(today());}
 function diffDays(a,b){return Math.round((b-a)/(1000*60*60*24))+1;}
