@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2026-06-30 11:50",
-    "status": "success",
-    "message": "로그인 성공",
-    "mode": "자동"
-  },
-  {
     "timestamp": "2026-06-30 12:00",
     "status": "success",
     "message": "로그인 성공",
@@ -2997,6 +2991,12 @@
     "timestamp": "2026-07-13 11:50",
     "status": "error",
     "message": "APIRequestContext.get: Connection closed while reading from the driver",
+    "mode": "자동"
+  },
+  {
+    "timestamp": "2026-07-13 12:00",
+    "status": "success",
+    "message": "로그인 성공",
     "mode": "자동"
   }
 ]
