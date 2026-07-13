@@ -342,7 +342,7 @@ body{font-family:'Pretendard',sans-serif;background:#f0f2f5;color:#1a1a2e;font-s
   </div>
 
   <div class="section">
-    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 </span></div>
+    <div class="sec-title"><span class="sec-title-l"><span class="dot amber"></span>시간대별 접속 성공률 </span><span style="font-size:12px;font-weight:400;color:#aaa">셀을 클릭하면 해당 시간의 접속 내역을 확인할 수 있어요</span></div>
     <div id="allHeatmapWrap" style="overflow-x:auto"></div>
   </div>
 
@@ -656,7 +656,7 @@ function renderTodayTab(){
       if(ok){bg='#dcfce7';tc='#16a34a';lb='성공';}
       else{bg='#fee2e2';tc='#dc2626';lb='실패';}
     }
-    tlHtml+=`<div class="hm-cell" style="background:${bg};color:${tc};cursor:${rec?'default':'default'}" title="${h}시: ${rec?rec.message:'미실행'}">${lb}</div>`;
+    tlHtml+=`<div class="hm-cell" style="background:${bg};color:${tc};cursor:${rec?'pointer':'default'}" title="${h}시: ${rec?rec.message:'미실행'}" onclick="${rec?`openTodayHmPopup('${h}')`:''}">${lb}</div>`;
   });
   tlHtml+='</div>';
   tlHtml+=`<div style="display:flex;gap:12px;margin-top:10px;font-size:12px;color:#888;align-items:center">
@@ -858,6 +858,35 @@ function openHmPopupByDate(date, hour){
   const dt=new Date(date);
   const dow=['일','월','화','수','목','금','토'][dt.getDay()];
   document.getElementById('hmPopupTitle').textContent=`${date}(${dow}) ${hour}시대 접속 기록 (${records.length}건)`;
+  document.getElementById('hmPopupBody').innerHTML=`
+    <table class="popup-tbl">
+      <thead><tr>
+        <th class="sticky-col">일시</th>
+        <th>상태</th><th>구분</th><th>메시지</th>
+      </tr></thead>
+      <tbody>${records.map(d=>{
+        const ok=d.status==='success';
+        const m=(d.mode||'자동')==='수동';
+        return `<tr class="${ok?'':'fail-row'}">
+          <td class="sticky-col" style="color:#666">${d.timestamp}</td>
+          <td><span class="badge ${ok?'ok':'fail'}">${ok?'성공':'실패'}</span></td>
+          <td><span class="mode-badge ${m?'mode-manual':'mode-auto'}">${m?'수동':'자동'}</span></td>
+          <td style="max-width:300px">${d.message}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  document.getElementById('hmPopup').classList.add('show');
+}
+
+function openTodayHmPopup(hour){
+  const todayData=window._todayData||[];
+  const records=todayData.filter(d=>d.timestamp.slice(11,13)===hour)
+    .sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
+  if(records.length===0) return;
+  const ts=todayStr();
+  const dt=new Date(ts);
+  const dow=['일','월','화','수','목','금','토'][dt.getDay()];
+  document.getElementById('hmPopupTitle').textContent=`${ts}(${dow}) ${hour}시대 접속 기록 (${records.length}건)`;
   document.getElementById('hmPopupBody').innerHTML=`
     <table class="popup-tbl">
       <thead><tr>
