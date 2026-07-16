@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2026-07-03 13:20",
-    "status": "success",
-    "message": "로그인 성공",
-    "mode": "자동"
-  },
-  {
     "timestamp": "2026-07-03 13:30",
     "status": "success",
     "message": "로그인 성공",
@@ -3089,5 +3083,12 @@
     "message": "Page.goto: Timeout 25000ms exceeded.\nCall log:\n  - navigating to \"https://support.amaranth10.com/user/am10manage/login\", waiting until \"domcontentloaded\"\n",
     "mode": "자동",
     "retries": 2
+  },
+  {
+    "timestamp": "2026-07-16 14:30",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동",
+    "retries": 0
   }
 ]
