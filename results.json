@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2026-07-06 10:10",
-    "status": "success",
-    "message": "로그인 성공",
-    "mode": "자동"
-  },
-  {
     "timestamp": "2026-07-06 10:20",
     "status": "success",
     "message": "로그인 성공",
@@ -3121,6 +3115,13 @@
   },
   {
     "timestamp": "2026-07-20 11:10",
+    "status": "success",
+    "message": "로그인 성공",
+    "mode": "자동",
+    "retries": 0
+  },
+  {
+    "timestamp": "2026-07-20 11:34",
     "status": "success",
     "message": "로그인 성공",
     "mode": "자동",
